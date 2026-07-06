@@ -4,11 +4,11 @@ import type { ReactNode } from "react";
 
 type Tab = { to: string; label: string; icon: typeof Home; exact?: boolean };
 const tabs: Tab[] = [
-  { to: "/", label: "Home", icon: Home, exact: true },
-  { to: "/cocktails", label: "Cocktails", icon: GlassWater },
-  { to: "/manuals", label: "Manuals", icon: BookOpen },
-  { to: "/equipment", label: "Equipment", icon: Wrench },
-  { to: "/emergency", label: "SOS", icon: AlertTriangle },
+  { to: "/", label: "ホーム", icon: Home, exact: true },
+  { to: "/cocktails", label: "カクテル", icon: GlassWater },
+  { to: "/manuals", label: "マニュアル", icon: BookOpen },
+  { to: "/equipment", label: "機材", icon: Wrench },
+  { to: "/emergency", label: "緊急対応", icon: AlertTriangle },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
