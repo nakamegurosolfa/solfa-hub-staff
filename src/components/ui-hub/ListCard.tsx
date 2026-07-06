@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, type LucideIcon } from "lucide-react";
-import type { ComponentProps, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type BaseProps = {
   title: string;
@@ -8,6 +8,8 @@ type BaseProps = {
   icon?: LucideIcon;
   iconColor?: string;
   trailing?: ReactNode;
+  to: string;
+  params?: Record<string, string>;
 };
 
 export function ListCard({
@@ -17,10 +19,11 @@ export function ListCard({
   iconColor,
   trailing,
   ...link
-}: BaseProps & ComponentProps<typeof Link>) {
+}: BaseProps) {
   return (
     <Link
-      {...link}
+      to={link.to as never}
+      params={link.params as never}
       className="tap group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-4 hover:bg-[var(--color-surface-2)]"
     >
       {Icon ? (
