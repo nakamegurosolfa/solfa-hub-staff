@@ -9,38 +9,210 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ManualsRouteImport } from './routes/manuals'
+import { Route as EquipmentRouteImport } from './routes/equipment'
+import { Route as EmergencyRouteImport } from './routes/emergency'
+import { Route as CocktailsRouteImport } from './routes/cocktails'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ManualsIndexRouteImport } from './routes/manuals.index'
+import { Route as EquipmentIndexRouteImport } from './routes/equipment.index'
+import { Route as EmergencyIndexRouteImport } from './routes/emergency.index'
+import { Route as CocktailsIndexRouteImport } from './routes/cocktails.index'
+import { Route as ManualsIdRouteImport } from './routes/manuals.$id'
+import { Route as EquipmentIdRouteImport } from './routes/equipment.$id'
+import { Route as EmergencyIdRouteImport } from './routes/emergency.$id'
+import { Route as CocktailsIdRouteImport } from './routes/cocktails.$id'
 
+const ManualsRoute = ManualsRouteImport.update({
+  id: '/manuals',
+  path: '/manuals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EquipmentRoute = EquipmentRouteImport.update({
+  id: '/equipment',
+  path: '/equipment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmergencyRoute = EmergencyRouteImport.update({
+  id: '/emergency',
+  path: '/emergency',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CocktailsRoute = CocktailsRouteImport.update({
+  id: '/cocktails',
+  path: '/cocktails',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ManualsIndexRoute = ManualsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ManualsRoute,
+} as any)
+const EquipmentIndexRoute = EquipmentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EquipmentRoute,
+} as any)
+const EmergencyIndexRoute = EmergencyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EmergencyRoute,
+} as any)
+const CocktailsIndexRoute = CocktailsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CocktailsRoute,
+} as any)
+const ManualsIdRoute = ManualsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ManualsRoute,
+} as any)
+const EquipmentIdRoute = EquipmentIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => EquipmentRoute,
+} as any)
+const EmergencyIdRoute = EmergencyIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => EmergencyRoute,
+} as any)
+const CocktailsIdRoute = CocktailsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => CocktailsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cocktails': typeof CocktailsRouteWithChildren
+  '/emergency': typeof EmergencyRouteWithChildren
+  '/equipment': typeof EquipmentRouteWithChildren
+  '/manuals': typeof ManualsRouteWithChildren
+  '/cocktails/$id': typeof CocktailsIdRoute
+  '/emergency/$id': typeof EmergencyIdRoute
+  '/equipment/$id': typeof EquipmentIdRoute
+  '/manuals/$id': typeof ManualsIdRoute
+  '/cocktails/': typeof CocktailsIndexRoute
+  '/emergency/': typeof EmergencyIndexRoute
+  '/equipment/': typeof EquipmentIndexRoute
+  '/manuals/': typeof ManualsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cocktails/$id': typeof CocktailsIdRoute
+  '/emergency/$id': typeof EmergencyIdRoute
+  '/equipment/$id': typeof EquipmentIdRoute
+  '/manuals/$id': typeof ManualsIdRoute
+  '/cocktails': typeof CocktailsIndexRoute
+  '/emergency': typeof EmergencyIndexRoute
+  '/equipment': typeof EquipmentIndexRoute
+  '/manuals': typeof ManualsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cocktails': typeof CocktailsRouteWithChildren
+  '/emergency': typeof EmergencyRouteWithChildren
+  '/equipment': typeof EquipmentRouteWithChildren
+  '/manuals': typeof ManualsRouteWithChildren
+  '/cocktails/$id': typeof CocktailsIdRoute
+  '/emergency/$id': typeof EmergencyIdRoute
+  '/equipment/$id': typeof EquipmentIdRoute
+  '/manuals/$id': typeof ManualsIdRoute
+  '/cocktails/': typeof CocktailsIndexRoute
+  '/emergency/': typeof EmergencyIndexRoute
+  '/equipment/': typeof EquipmentIndexRoute
+  '/manuals/': typeof ManualsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/cocktails'
+    | '/emergency'
+    | '/equipment'
+    | '/manuals'
+    | '/cocktails/$id'
+    | '/emergency/$id'
+    | '/equipment/$id'
+    | '/manuals/$id'
+    | '/cocktails/'
+    | '/emergency/'
+    | '/equipment/'
+    | '/manuals/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/cocktails/$id'
+    | '/emergency/$id'
+    | '/equipment/$id'
+    | '/manuals/$id'
+    | '/cocktails'
+    | '/emergency'
+    | '/equipment'
+    | '/manuals'
+  id:
+    | '__root__'
+    | '/'
+    | '/cocktails'
+    | '/emergency'
+    | '/equipment'
+    | '/manuals'
+    | '/cocktails/$id'
+    | '/emergency/$id'
+    | '/equipment/$id'
+    | '/manuals/$id'
+    | '/cocktails/'
+    | '/emergency/'
+    | '/equipment/'
+    | '/manuals/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CocktailsRoute: typeof CocktailsRouteWithChildren
+  EmergencyRoute: typeof EmergencyRouteWithChildren
+  EquipmentRoute: typeof EquipmentRouteWithChildren
+  ManualsRoute: typeof ManualsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/manuals': {
+      id: '/manuals'
+      path: '/manuals'
+      fullPath: '/manuals'
+      preLoaderRoute: typeof ManualsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/equipment': {
+      id: '/equipment'
+      path: '/equipment'
+      fullPath: '/equipment'
+      preLoaderRoute: typeof EquipmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/emergency': {
+      id: '/emergency'
+      path: '/emergency'
+      fullPath: '/emergency'
+      preLoaderRoute: typeof EmergencyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cocktails': {
+      id: '/cocktails'
+      path: '/cocktails'
+      fullPath: '/cocktails'
+      preLoaderRoute: typeof CocktailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +220,127 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manuals/': {
+      id: '/manuals/'
+      path: '/'
+      fullPath: '/manuals/'
+      preLoaderRoute: typeof ManualsIndexRouteImport
+      parentRoute: typeof ManualsRoute
+    }
+    '/equipment/': {
+      id: '/equipment/'
+      path: '/'
+      fullPath: '/equipment/'
+      preLoaderRoute: typeof EquipmentIndexRouteImport
+      parentRoute: typeof EquipmentRoute
+    }
+    '/emergency/': {
+      id: '/emergency/'
+      path: '/'
+      fullPath: '/emergency/'
+      preLoaderRoute: typeof EmergencyIndexRouteImport
+      parentRoute: typeof EmergencyRoute
+    }
+    '/cocktails/': {
+      id: '/cocktails/'
+      path: '/'
+      fullPath: '/cocktails/'
+      preLoaderRoute: typeof CocktailsIndexRouteImport
+      parentRoute: typeof CocktailsRoute
+    }
+    '/manuals/$id': {
+      id: '/manuals/$id'
+      path: '/$id'
+      fullPath: '/manuals/$id'
+      preLoaderRoute: typeof ManualsIdRouteImport
+      parentRoute: typeof ManualsRoute
+    }
+    '/equipment/$id': {
+      id: '/equipment/$id'
+      path: '/$id'
+      fullPath: '/equipment/$id'
+      preLoaderRoute: typeof EquipmentIdRouteImport
+      parentRoute: typeof EquipmentRoute
+    }
+    '/emergency/$id': {
+      id: '/emergency/$id'
+      path: '/$id'
+      fullPath: '/emergency/$id'
+      preLoaderRoute: typeof EmergencyIdRouteImport
+      parentRoute: typeof EmergencyRoute
+    }
+    '/cocktails/$id': {
+      id: '/cocktails/$id'
+      path: '/$id'
+      fullPath: '/cocktails/$id'
+      preLoaderRoute: typeof CocktailsIdRouteImport
+      parentRoute: typeof CocktailsRoute
+    }
   }
 }
 
+interface CocktailsRouteChildren {
+  CocktailsIdRoute: typeof CocktailsIdRoute
+  CocktailsIndexRoute: typeof CocktailsIndexRoute
+}
+
+const CocktailsRouteChildren: CocktailsRouteChildren = {
+  CocktailsIdRoute: CocktailsIdRoute,
+  CocktailsIndexRoute: CocktailsIndexRoute,
+}
+
+const CocktailsRouteWithChildren = CocktailsRoute._addFileChildren(
+  CocktailsRouteChildren,
+)
+
+interface EmergencyRouteChildren {
+  EmergencyIdRoute: typeof EmergencyIdRoute
+  EmergencyIndexRoute: typeof EmergencyIndexRoute
+}
+
+const EmergencyRouteChildren: EmergencyRouteChildren = {
+  EmergencyIdRoute: EmergencyIdRoute,
+  EmergencyIndexRoute: EmergencyIndexRoute,
+}
+
+const EmergencyRouteWithChildren = EmergencyRoute._addFileChildren(
+  EmergencyRouteChildren,
+)
+
+interface EquipmentRouteChildren {
+  EquipmentIdRoute: typeof EquipmentIdRoute
+  EquipmentIndexRoute: typeof EquipmentIndexRoute
+}
+
+const EquipmentRouteChildren: EquipmentRouteChildren = {
+  EquipmentIdRoute: EquipmentIdRoute,
+  EquipmentIndexRoute: EquipmentIndexRoute,
+}
+
+const EquipmentRouteWithChildren = EquipmentRoute._addFileChildren(
+  EquipmentRouteChildren,
+)
+
+interface ManualsRouteChildren {
+  ManualsIdRoute: typeof ManualsIdRoute
+  ManualsIndexRoute: typeof ManualsIndexRoute
+}
+
+const ManualsRouteChildren: ManualsRouteChildren = {
+  ManualsIdRoute: ManualsIdRoute,
+  ManualsIndexRoute: ManualsIndexRoute,
+}
+
+const ManualsRouteWithChildren =
+  ManualsRoute._addFileChildren(ManualsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CocktailsRoute: CocktailsRouteWithChildren,
+  EmergencyRoute: EmergencyRouteWithChildren,
+  EquipmentRoute: EquipmentRouteWithChildren,
+  ManualsRoute: ManualsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

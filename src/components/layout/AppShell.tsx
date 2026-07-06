@@ -2,13 +2,14 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Home, GlassWater, BookOpen, Wrench, AlertTriangle } from "lucide-react";
 import type { ReactNode } from "react";
 
-const tabs = [
+type Tab = { to: string; label: string; icon: typeof Home; exact?: boolean };
+const tabs: Tab[] = [
   { to: "/", label: "Home", icon: Home, exact: true },
   { to: "/cocktails", label: "Cocktails", icon: GlassWater },
   { to: "/manuals", label: "Manuals", icon: BookOpen },
   { to: "/equipment", label: "Equipment", icon: Wrench },
   { to: "/emergency", label: "SOS", icon: AlertTriangle },
-] as const;
+];
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
