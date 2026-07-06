@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { GlassWater } from "lucide-react";
 import { AppShell, BackLink } from "@/components/layout/AppShell";
-import { cocktails } from "@/data/cocktails";
+import { cocktails, type Cocktail } from "@/data/cocktails";
 
 export const Route = createFileRoute("/cocktails/$id")({
   loader: ({ params }) => {
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/cocktails/$id")({
 });
 
 function CocktailDetail() {
-  const { cocktail } = Route.useLoaderData();
+  const { cocktail } = Route.useLoaderData() as { cocktail: Cocktail };
 
   return (
     <AppShell>
