@@ -76,6 +76,16 @@ function parseRecipeTextToBlocks(text: string): NotionBlock[] {
       continue;
     }
 
+    const circled = trimmed.match(/^[\u2460-\u2473\u3251-\u325F]\s*(.+)$/);
+    if (circled) {
+      blocks.push({
+        id: `recipe-circled-${index}`,
+        type: "numbered_list_item",
+        richText: plainText(circled[1].trim()),
+      });
+      continue;
+    }
+
     blocks.push({
       id: `recipe-p-${index}`,
       type: "paragraph",
@@ -84,6 +94,30 @@ function parseRecipeTextToBlocks(text: string): NotionBlock[] {
   }
 
   return blocks;
+}
+
+function blockHasVisibleContent(block: NotionBlock): boolean {
+  switch (block.type) {
+    case "divider":
+      return false;
+    case "image":
+      return Boolean(block.imageUrl);
+    case "video":
+    case "embed":
+      return Boolean(block.mediaUrl);
+    case "table":
+      return Boolean(block.children?.some((child) => child.type === "table_row" && child.cells?.some((cell) => cell.some((item) => item.plain_text.trim()))));
+    case "unsupported":
+      return Boolean(block.children?.some(blockHasVisibleContent));
+    default: {
+      const text = block.richText.map((item) => item.plain_text).join("").trim();
+      return text.length > 0;
+    }
+  }
+}
+
+function hasMeaningfulBodyBlocks(blocks: NotionBlock[]): boolean {
+  return blocks.some(blockHasVisibleContent);
 }
 
 function plain(items: RichTextItemResponse[]) {
@@ -180,7 +214,7 @@ function mapCocktailSummary(page: PageObjectResponse): CocktailSummary {
   const ingredientTags = readMultiSelect(props, ["材料タグ", "材料", "Ingredients"]);
   const difficulty = readSelect(props, ["難易度", "Difficulty"]) ?? readRichText(props, ["難易度", "Difficulty"]);
   const recommended = readCheckbox(props, ["オススメ", "おすすめ", "Recommended"]);
-  const recipeText = readRichText(props, ["レシピ本文", "作り方", "Recipe"]);
+  const recipeText = readRichText(props, ["レシピ本文", "レシピ", "作り方", "Recipe"]);
 
   return {
     id: page.id,
@@ -256,12 +290,12 @@ export async function getCocktailDetail(pageId: string): Promise<CocktailDetail>
 
   const summary = mapCocktailSummary(page);
   const content = await getManualPageContent(normalizedPageId);
-  const blocks =
-    content.blocks.length > 0
-      ? content.blocks
-      : summary.recipeText
-        ? parseRecipeTextToBlocks(summary.recipeText)
-        : [];
+  const propertyBlocks = summary.recipeText ? parseRecipeTextToBlocks(summary.recipeText) : [];
+  const blocks = hasMeaningfulBodyBlocks(content.blocks)
+    ? content.blocks
+    : propertyBlocks.length > 0
+      ? propertyBlocks
+      : content.blocks;
 
   return {
     ...summary,
