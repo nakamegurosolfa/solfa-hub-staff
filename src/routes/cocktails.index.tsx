@@ -1,46 +1,84 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { GlassWater } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { z } from "zod";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
+import { CocktailCard } from "@/components/ui-hub/CocktailCard";
+import { SectionLabel } from "@/components/ui-hub/ListCard";
 import { SearchBar } from "@/components/ui-hub/SearchBar";
-import { ListCard } from "@/components/ui-hub/ListCard";
-import { cocktails } from "@/data/cocktails";
+import { filterCocktails } from "@/lib/cocktail-search";
+import { fetchCocktailIndex } from "@/lib/notion-functions";
+
+const cocktailSearchSchema = z.object({
+  q: z.string().optional(),
+});
 
 export const Route = createFileRoute("/cocktails/")({
+  validateSearch: cocktailSearchSchema,
+  loader: () => fetchCocktailIndex(),
+  head: () => ({ meta: [{ title: "カクテルレシピ — solfa MANUAL APP" }] }),
   component: CocktailsIndex,
-  head: () => ({ meta: [{ title: "Cocktails — solfa HUB" }] }),
+  errorComponent: () => (
+    <AppShell>
+      <PageHeader title="カクテルレシピ" subtitle="ドリンクレシピ・材料・作り方" />
+      <p className="rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-6 text-center text-sm leading-relaxed text-muted-foreground">
+        カクテルレシピの読み込みに失敗しました。
+        <br />
+        Notion の「カクテルレシピ」データベースを Integration「solfa MANUAL APP」に接続し、
+        <code className="text-foreground/80">NOTION_COCKTAIL_DATABASE_ID</code> が正しいか確認してください。
+      </p>
+    </AppShell>
+  ),
 });
 
 function CocktailsIndex() {
-  const [q, setQ] = useState("");
-  const filtered = useMemo(() => {
-    const t = q.trim().toLowerCase();
-    if (!t) return cocktails;
-    return cocktails.filter(
-      (c) => c.name.toLowerCase().includes(t) || c.ingredients.join(" ").toLowerCase().includes(t),
-    );
-  }, [q]);
+  const cocktails = Route.useLoaderData();
+  const search = Route.useSearch();
+  const [query, setQuery] = useState(search.q ?? "");
+
+  useEffect(() => {
+    setQuery(search.q ?? "");
+  }, [search.q]);
+
+  const filtered = useMemo(() => filterCocktails(cocktails, query), [cocktails, query]);
+  const limited = useMemo(() => filtered.filter((cocktail) => cocktail.limitedTime), [filtered]);
+  const regular = useMemo(() => filtered.filter((cocktail) => !cocktail.limitedTime), [filtered]);
 
   return (
     <AppShell>
-      <PageHeader title="Cocktails" subtitle={`${cocktails.length} recipes`} />
-      <SearchBar value={q} onChange={setQ} placeholder="Search cocktails or ingredients" />
-      <div className="mt-4 flex flex-col gap-2">
-        {filtered.map((c) => (
-          <ListCard
-            key={c.id}
-            to="/cocktails/$id"
-            params={{ id: c.id }}
-            title={c.name}
-            subtitle={c.glass ? `${c.glass} · ${c.ingredients.length} ingredients` : `${c.ingredients.length} ingredients`}
-            icon={GlassWater}
-          />
-        ))}
+      <PageHeader title="カクテルレシピ" subtitle="ドリンクレシピ・材料・作り方" />
+
+      <SearchBar
+        value={query}
+        onChange={setQuery}
+        placeholder="カクテル名・材料・グラス・氷などで検索"
+      />
+
+      <div className="mt-6 flex flex-col gap-6">
         {filtered.length === 0 ? (
           <p className="rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-6 text-center text-sm text-muted-foreground">
-            No cocktails matched.
+            {query.trim() ? `「${query}」に一致するカクテルはありません。` : "カクテルレシピが見つかりません。"}
           </p>
-        ) : null}
+        ) : (
+          <>
+            {limited.length > 0 && (
+              <section>
+                <SectionLabel>🎉 期間限定</SectionLabel>
+                <div className="flex flex-col gap-3">
+                  {limited.map((cocktail) => (
+                    <CocktailCard key={cocktail.id} cocktail={cocktail} />
+                  ))}
+                </div>
+              </section>
+            )}
+            {regular.length > 0 && (
+              <div className="flex flex-col gap-3">
+                {regular.map((cocktail) => (
+                  <CocktailCard key={cocktail.id} cocktail={cocktail} />
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </AppShell>
   );

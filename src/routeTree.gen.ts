@@ -9,33 +9,47 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RulesRouteImport } from './routes/rules'
+import { Route as OrganizationRouteImport } from './routes/organization'
 import { Route as ManualsRouteImport } from './routes/manuals'
-import { Route as EquipmentRouteImport } from './routes/equipment'
-import { Route as EmergencyRouteImport } from './routes/emergency'
 import { Route as CocktailsRouteImport } from './routes/cocktails'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UpdatesIndexRouteImport } from './routes/updates.index'
+import { Route as SearchIndexRouteImport } from './routes/search.index'
+import { Route as RulesIndexRouteImport } from './routes/rules.index'
+import { Route as RecentIndexRouteImport } from './routes/recent.index'
+import { Route as QaIndexRouteImport } from './routes/qa.index'
+import { Route as OrganizationIndexRouteImport } from './routes/organization.index'
+import { Route as MeIndexRouteImport } from './routes/me.index'
 import { Route as ManualsIndexRouteImport } from './routes/manuals.index'
-import { Route as EquipmentIndexRouteImport } from './routes/equipment.index'
-import { Route as EmergencyIndexRouteImport } from './routes/emergency.index'
+import { Route as LoginIndexRouteImport } from './routes/login.index'
+import { Route as FavoritesIndexRouteImport } from './routes/favorites.index'
+import { Route as EmployeeWorkIndexRouteImport } from './routes/employee-work.index'
+import { Route as EmployeeLoginIndexRouteImport } from './routes/employee-login.index'
 import { Route as CocktailsIndexRouteImport } from './routes/cocktails.index'
+import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as ManualsIdRouteImport } from './routes/manuals.$id'
-import { Route as EquipmentIdRouteImport } from './routes/equipment.$id'
-import { Route as EmergencyIdRouteImport } from './routes/emergency.$id'
+import { Route as EmployeeWorkIdRouteImport } from './routes/employee-work.$id'
 import { Route as CocktailsIdRouteImport } from './routes/cocktails.$id'
+import { Route as AboutIdRouteImport } from './routes/about.$id'
+import { Route as RulesCategoryIdRouteImport } from './routes/rules.category.$id'
+import { Route as ApiNotionImageBlockIdRouteImport } from './routes/api/notion-image.$blockId'
+import { Route as AboutCategoryIdRouteImport } from './routes/about.category.$id'
 
+const RulesRoute = RulesRouteImport.update({
+  id: '/rules',
+  path: '/rules',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizationRoute = OrganizationRouteImport.update({
+  id: '/organization',
+  path: '/organization',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ManualsRoute = ManualsRouteImport.update({
   id: '/manuals',
   path: '/manuals',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EquipmentRoute = EquipmentRouteImport.update({
-  id: '/equipment',
-  path: '/equipment',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EmergencyRoute = EmergencyRouteImport.update({
-  id: '/emergency',
-  path: '/emergency',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CocktailsRoute = CocktailsRouteImport.update({
@@ -43,9 +57,49 @@ const CocktailsRoute = CocktailsRouteImport.update({
   path: '/cocktails',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UpdatesIndexRoute = UpdatesIndexRouteImport.update({
+  id: '/updates/',
+  path: '/updates/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchIndexRoute = SearchIndexRouteImport.update({
+  id: '/search/',
+  path: '/search/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RulesIndexRoute = RulesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RulesRoute,
+} as any)
+const RecentIndexRoute = RecentIndexRouteImport.update({
+  id: '/recent/',
+  path: '/recent/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QaIndexRoute = QaIndexRouteImport.update({
+  id: '/qa/',
+  path: '/qa/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizationIndexRoute = OrganizationIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OrganizationRoute,
+} as any)
+const MeIndexRoute = MeIndexRouteImport.update({
+  id: '/me/',
+  path: '/me/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManualsIndexRoute = ManualsIndexRouteImport.update({
@@ -53,157 +107,281 @@ const ManualsIndexRoute = ManualsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ManualsRoute,
 } as any)
-const EquipmentIndexRoute = EquipmentIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => EquipmentRoute,
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const EmergencyIndexRoute = EmergencyIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => EmergencyRoute,
+const FavoritesIndexRoute = FavoritesIndexRouteImport.update({
+  id: '/favorites/',
+  path: '/favorites/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeWorkIndexRoute = EmployeeWorkIndexRouteImport.update({
+  id: '/employee-work/',
+  path: '/employee-work/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeLoginIndexRoute = EmployeeLoginIndexRouteImport.update({
+  id: '/employee-login/',
+  path: '/employee-login/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CocktailsIndexRoute = CocktailsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => CocktailsRoute,
 } as any)
+const AboutIndexRoute = AboutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AboutRoute,
+} as any)
 const ManualsIdRoute = ManualsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => ManualsRoute,
 } as any)
-const EquipmentIdRoute = EquipmentIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => EquipmentRoute,
-} as any)
-const EmergencyIdRoute = EmergencyIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => EmergencyRoute,
+const EmployeeWorkIdRoute = EmployeeWorkIdRouteImport.update({
+  id: '/employee-work/$id',
+  path: '/employee-work/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CocktailsIdRoute = CocktailsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => CocktailsRoute,
 } as any)
+const AboutIdRoute = AboutIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AboutRoute,
+} as any)
+const RulesCategoryIdRoute = RulesCategoryIdRouteImport.update({
+  id: '/category/$id',
+  path: '/category/$id',
+  getParentRoute: () => RulesRoute,
+} as any)
+const ApiNotionImageBlockIdRoute = ApiNotionImageBlockIdRouteImport.update({
+  id: '/api/notion-image/$blockId',
+  path: '/api/notion-image/$blockId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutCategoryIdRoute = AboutCategoryIdRouteImport.update({
+  id: '/category/$id',
+  path: '/category/$id',
+  getParentRoute: () => AboutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRouteWithChildren
   '/cocktails': typeof CocktailsRouteWithChildren
-  '/emergency': typeof EmergencyRouteWithChildren
-  '/equipment': typeof EquipmentRouteWithChildren
   '/manuals': typeof ManualsRouteWithChildren
+  '/organization': typeof OrganizationRouteWithChildren
+  '/rules': typeof RulesRouteWithChildren
+  '/about/$id': typeof AboutIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
-  '/emergency/$id': typeof EmergencyIdRoute
-  '/equipment/$id': typeof EquipmentIdRoute
+  '/employee-work/$id': typeof EmployeeWorkIdRoute
   '/manuals/$id': typeof ManualsIdRoute
+  '/about/': typeof AboutIndexRoute
   '/cocktails/': typeof CocktailsIndexRoute
-  '/emergency/': typeof EmergencyIndexRoute
-  '/equipment/': typeof EquipmentIndexRoute
+  '/employee-login/': typeof EmployeeLoginIndexRoute
+  '/employee-work/': typeof EmployeeWorkIndexRoute
+  '/favorites/': typeof FavoritesIndexRoute
+  '/login/': typeof LoginIndexRoute
   '/manuals/': typeof ManualsIndexRoute
+  '/me/': typeof MeIndexRoute
+  '/organization/': typeof OrganizationIndexRoute
+  '/qa/': typeof QaIndexRoute
+  '/recent/': typeof RecentIndexRoute
+  '/rules/': typeof RulesIndexRoute
+  '/search/': typeof SearchIndexRoute
+  '/updates/': typeof UpdatesIndexRoute
+  '/about/category/$id': typeof AboutCategoryIdRoute
+  '/api/notion-image/$blockId': typeof ApiNotionImageBlockIdRoute
+  '/rules/category/$id': typeof RulesCategoryIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about/$id': typeof AboutIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
-  '/emergency/$id': typeof EmergencyIdRoute
-  '/equipment/$id': typeof EquipmentIdRoute
+  '/employee-work/$id': typeof EmployeeWorkIdRoute
   '/manuals/$id': typeof ManualsIdRoute
+  '/about': typeof AboutIndexRoute
   '/cocktails': typeof CocktailsIndexRoute
-  '/emergency': typeof EmergencyIndexRoute
-  '/equipment': typeof EquipmentIndexRoute
+  '/employee-login': typeof EmployeeLoginIndexRoute
+  '/employee-work': typeof EmployeeWorkIndexRoute
+  '/favorites': typeof FavoritesIndexRoute
+  '/login': typeof LoginIndexRoute
   '/manuals': typeof ManualsIndexRoute
+  '/me': typeof MeIndexRoute
+  '/organization': typeof OrganizationIndexRoute
+  '/qa': typeof QaIndexRoute
+  '/recent': typeof RecentIndexRoute
+  '/rules': typeof RulesIndexRoute
+  '/search': typeof SearchIndexRoute
+  '/updates': typeof UpdatesIndexRoute
+  '/about/category/$id': typeof AboutCategoryIdRoute
+  '/api/notion-image/$blockId': typeof ApiNotionImageBlockIdRoute
+  '/rules/category/$id': typeof RulesCategoryIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRouteWithChildren
   '/cocktails': typeof CocktailsRouteWithChildren
-  '/emergency': typeof EmergencyRouteWithChildren
-  '/equipment': typeof EquipmentRouteWithChildren
   '/manuals': typeof ManualsRouteWithChildren
+  '/organization': typeof OrganizationRouteWithChildren
+  '/rules': typeof RulesRouteWithChildren
+  '/about/$id': typeof AboutIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
-  '/emergency/$id': typeof EmergencyIdRoute
-  '/equipment/$id': typeof EquipmentIdRoute
+  '/employee-work/$id': typeof EmployeeWorkIdRoute
   '/manuals/$id': typeof ManualsIdRoute
+  '/about/': typeof AboutIndexRoute
   '/cocktails/': typeof CocktailsIndexRoute
-  '/emergency/': typeof EmergencyIndexRoute
-  '/equipment/': typeof EquipmentIndexRoute
+  '/employee-login/': typeof EmployeeLoginIndexRoute
+  '/employee-work/': typeof EmployeeWorkIndexRoute
+  '/favorites/': typeof FavoritesIndexRoute
+  '/login/': typeof LoginIndexRoute
   '/manuals/': typeof ManualsIndexRoute
+  '/me/': typeof MeIndexRoute
+  '/organization/': typeof OrganizationIndexRoute
+  '/qa/': typeof QaIndexRoute
+  '/recent/': typeof RecentIndexRoute
+  '/rules/': typeof RulesIndexRoute
+  '/search/': typeof SearchIndexRoute
+  '/updates/': typeof UpdatesIndexRoute
+  '/about/category/$id': typeof AboutCategoryIdRoute
+  '/api/notion-image/$blockId': typeof ApiNotionImageBlockIdRoute
+  '/rules/category/$id': typeof RulesCategoryIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/cocktails'
-    | '/emergency'
-    | '/equipment'
     | '/manuals'
+    | '/organization'
+    | '/rules'
+    | '/about/$id'
     | '/cocktails/$id'
-    | '/emergency/$id'
-    | '/equipment/$id'
+    | '/employee-work/$id'
     | '/manuals/$id'
+    | '/about/'
     | '/cocktails/'
-    | '/emergency/'
-    | '/equipment/'
+    | '/employee-login/'
+    | '/employee-work/'
+    | '/favorites/'
+    | '/login/'
     | '/manuals/'
+    | '/me/'
+    | '/organization/'
+    | '/qa/'
+    | '/recent/'
+    | '/rules/'
+    | '/search/'
+    | '/updates/'
+    | '/about/category/$id'
+    | '/api/notion-image/$blockId'
+    | '/rules/category/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about/$id'
     | '/cocktails/$id'
-    | '/emergency/$id'
-    | '/equipment/$id'
+    | '/employee-work/$id'
     | '/manuals/$id'
+    | '/about'
     | '/cocktails'
-    | '/emergency'
-    | '/equipment'
+    | '/employee-login'
+    | '/employee-work'
+    | '/favorites'
+    | '/login'
     | '/manuals'
+    | '/me'
+    | '/organization'
+    | '/qa'
+    | '/recent'
+    | '/rules'
+    | '/search'
+    | '/updates'
+    | '/about/category/$id'
+    | '/api/notion-image/$blockId'
+    | '/rules/category/$id'
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/cocktails'
-    | '/emergency'
-    | '/equipment'
     | '/manuals'
+    | '/organization'
+    | '/rules'
+    | '/about/$id'
     | '/cocktails/$id'
-    | '/emergency/$id'
-    | '/equipment/$id'
+    | '/employee-work/$id'
     | '/manuals/$id'
+    | '/about/'
     | '/cocktails/'
-    | '/emergency/'
-    | '/equipment/'
+    | '/employee-login/'
+    | '/employee-work/'
+    | '/favorites/'
+    | '/login/'
     | '/manuals/'
+    | '/me/'
+    | '/organization/'
+    | '/qa/'
+    | '/recent/'
+    | '/rules/'
+    | '/search/'
+    | '/updates/'
+    | '/about/category/$id'
+    | '/api/notion-image/$blockId'
+    | '/rules/category/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRouteWithChildren
   CocktailsRoute: typeof CocktailsRouteWithChildren
-  EmergencyRoute: typeof EmergencyRouteWithChildren
-  EquipmentRoute: typeof EquipmentRouteWithChildren
   ManualsRoute: typeof ManualsRouteWithChildren
+  OrganizationRoute: typeof OrganizationRouteWithChildren
+  RulesRoute: typeof RulesRouteWithChildren
+  EmployeeWorkIdRoute: typeof EmployeeWorkIdRoute
+  EmployeeLoginIndexRoute: typeof EmployeeLoginIndexRoute
+  EmployeeWorkIndexRoute: typeof EmployeeWorkIndexRoute
+  FavoritesIndexRoute: typeof FavoritesIndexRoute
+  LoginIndexRoute: typeof LoginIndexRoute
+  MeIndexRoute: typeof MeIndexRoute
+  QaIndexRoute: typeof QaIndexRoute
+  RecentIndexRoute: typeof RecentIndexRoute
+  SearchIndexRoute: typeof SearchIndexRoute
+  UpdatesIndexRoute: typeof UpdatesIndexRoute
+  ApiNotionImageBlockIdRoute: typeof ApiNotionImageBlockIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/rules': {
+      id: '/rules'
+      path: '/rules'
+      fullPath: '/rules'
+      preLoaderRoute: typeof RulesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organization': {
+      id: '/organization'
+      path: '/organization'
+      fullPath: '/organization'
+      preLoaderRoute: typeof OrganizationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/manuals': {
       id: '/manuals'
       path: '/manuals'
       fullPath: '/manuals'
       preLoaderRoute: typeof ManualsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/equipment': {
-      id: '/equipment'
-      path: '/equipment'
-      fullPath: '/equipment'
-      preLoaderRoute: typeof EquipmentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/emergency': {
-      id: '/emergency'
-      path: '/emergency'
-      fullPath: '/emergency'
-      preLoaderRoute: typeof EmergencyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cocktails': {
@@ -213,11 +391,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CocktailsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/updates/': {
+      id: '/updates/'
+      path: '/updates'
+      fullPath: '/updates/'
+      preLoaderRoute: typeof UpdatesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search/': {
+      id: '/search/'
+      path: '/search'
+      fullPath: '/search/'
+      preLoaderRoute: typeof SearchIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rules/': {
+      id: '/rules/'
+      path: '/'
+      fullPath: '/rules/'
+      preLoaderRoute: typeof RulesIndexRouteImport
+      parentRoute: typeof RulesRoute
+    }
+    '/recent/': {
+      id: '/recent/'
+      path: '/recent'
+      fullPath: '/recent/'
+      preLoaderRoute: typeof RecentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/qa/': {
+      id: '/qa/'
+      path: '/qa'
+      fullPath: '/qa/'
+      preLoaderRoute: typeof QaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organization/': {
+      id: '/organization/'
+      path: '/'
+      fullPath: '/organization/'
+      preLoaderRoute: typeof OrganizationIndexRouteImport
+      parentRoute: typeof OrganizationRoute
+    }
+    '/me/': {
+      id: '/me/'
+      path: '/me'
+      fullPath: '/me/'
+      preLoaderRoute: typeof MeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manuals/': {
@@ -227,19 +461,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManualsIndexRouteImport
       parentRoute: typeof ManualsRoute
     }
-    '/equipment/': {
-      id: '/equipment/'
-      path: '/'
-      fullPath: '/equipment/'
-      preLoaderRoute: typeof EquipmentIndexRouteImport
-      parentRoute: typeof EquipmentRoute
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/emergency/': {
-      id: '/emergency/'
-      path: '/'
-      fullPath: '/emergency/'
-      preLoaderRoute: typeof EmergencyIndexRouteImport
-      parentRoute: typeof EmergencyRoute
+    '/favorites/': {
+      id: '/favorites/'
+      path: '/favorites'
+      fullPath: '/favorites/'
+      preLoaderRoute: typeof FavoritesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee-work/': {
+      id: '/employee-work/'
+      path: '/employee-work'
+      fullPath: '/employee-work/'
+      preLoaderRoute: typeof EmployeeWorkIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee-login/': {
+      id: '/employee-login/'
+      path: '/employee-login'
+      fullPath: '/employee-login/'
+      preLoaderRoute: typeof EmployeeLoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/cocktails/': {
       id: '/cocktails/'
@@ -248,6 +496,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CocktailsIndexRouteImport
       parentRoute: typeof CocktailsRoute
     }
+    '/about/': {
+      id: '/about/'
+      path: '/'
+      fullPath: '/about/'
+      preLoaderRoute: typeof AboutIndexRouteImport
+      parentRoute: typeof AboutRoute
+    }
     '/manuals/$id': {
       id: '/manuals/$id'
       path: '/$id'
@@ -255,19 +510,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManualsIdRouteImport
       parentRoute: typeof ManualsRoute
     }
-    '/equipment/$id': {
-      id: '/equipment/$id'
-      path: '/$id'
-      fullPath: '/equipment/$id'
-      preLoaderRoute: typeof EquipmentIdRouteImport
-      parentRoute: typeof EquipmentRoute
-    }
-    '/emergency/$id': {
-      id: '/emergency/$id'
-      path: '/$id'
-      fullPath: '/emergency/$id'
-      preLoaderRoute: typeof EmergencyIdRouteImport
-      parentRoute: typeof EmergencyRoute
+    '/employee-work/$id': {
+      id: '/employee-work/$id'
+      path: '/employee-work/$id'
+      fullPath: '/employee-work/$id'
+      preLoaderRoute: typeof EmployeeWorkIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/cocktails/$id': {
       id: '/cocktails/$id'
@@ -276,8 +524,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CocktailsIdRouteImport
       parentRoute: typeof CocktailsRoute
     }
+    '/about/$id': {
+      id: '/about/$id'
+      path: '/$id'
+      fullPath: '/about/$id'
+      preLoaderRoute: typeof AboutIdRouteImport
+      parentRoute: typeof AboutRoute
+    }
+    '/rules/category/$id': {
+      id: '/rules/category/$id'
+      path: '/category/$id'
+      fullPath: '/rules/category/$id'
+      preLoaderRoute: typeof RulesCategoryIdRouteImport
+      parentRoute: typeof RulesRoute
+    }
+    '/api/notion-image/$blockId': {
+      id: '/api/notion-image/$blockId'
+      path: '/api/notion-image/$blockId'
+      fullPath: '/api/notion-image/$blockId'
+      preLoaderRoute: typeof ApiNotionImageBlockIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about/category/$id': {
+      id: '/about/category/$id'
+      path: '/category/$id'
+      fullPath: '/about/category/$id'
+      preLoaderRoute: typeof AboutCategoryIdRouteImport
+      parentRoute: typeof AboutRoute
+    }
   }
 }
+
+interface AboutRouteChildren {
+  AboutIdRoute: typeof AboutIdRoute
+  AboutIndexRoute: typeof AboutIndexRoute
+  AboutCategoryIdRoute: typeof AboutCategoryIdRoute
+}
+
+const AboutRouteChildren: AboutRouteChildren = {
+  AboutIdRoute: AboutIdRoute,
+  AboutIndexRoute: AboutIndexRoute,
+  AboutCategoryIdRoute: AboutCategoryIdRoute,
+}
+
+const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
 
 interface CocktailsRouteChildren {
   CocktailsIdRoute: typeof CocktailsIdRoute
@@ -293,34 +583,6 @@ const CocktailsRouteWithChildren = CocktailsRoute._addFileChildren(
   CocktailsRouteChildren,
 )
 
-interface EmergencyRouteChildren {
-  EmergencyIdRoute: typeof EmergencyIdRoute
-  EmergencyIndexRoute: typeof EmergencyIndexRoute
-}
-
-const EmergencyRouteChildren: EmergencyRouteChildren = {
-  EmergencyIdRoute: EmergencyIdRoute,
-  EmergencyIndexRoute: EmergencyIndexRoute,
-}
-
-const EmergencyRouteWithChildren = EmergencyRoute._addFileChildren(
-  EmergencyRouteChildren,
-)
-
-interface EquipmentRouteChildren {
-  EquipmentIdRoute: typeof EquipmentIdRoute
-  EquipmentIndexRoute: typeof EquipmentIndexRoute
-}
-
-const EquipmentRouteChildren: EquipmentRouteChildren = {
-  EquipmentIdRoute: EquipmentIdRoute,
-  EquipmentIndexRoute: EquipmentIndexRoute,
-}
-
-const EquipmentRouteWithChildren = EquipmentRoute._addFileChildren(
-  EquipmentRouteChildren,
-)
-
 interface ManualsRouteChildren {
   ManualsIdRoute: typeof ManualsIdRoute
   ManualsIndexRoute: typeof ManualsIndexRoute
@@ -334,13 +596,59 @@ const ManualsRouteChildren: ManualsRouteChildren = {
 const ManualsRouteWithChildren =
   ManualsRoute._addFileChildren(ManualsRouteChildren)
 
+interface OrganizationRouteChildren {
+  OrganizationIndexRoute: typeof OrganizationIndexRoute
+}
+
+const OrganizationRouteChildren: OrganizationRouteChildren = {
+  OrganizationIndexRoute: OrganizationIndexRoute,
+}
+
+const OrganizationRouteWithChildren = OrganizationRoute._addFileChildren(
+  OrganizationRouteChildren,
+)
+
+interface RulesRouteChildren {
+  RulesIndexRoute: typeof RulesIndexRoute
+  RulesCategoryIdRoute: typeof RulesCategoryIdRoute
+}
+
+const RulesRouteChildren: RulesRouteChildren = {
+  RulesIndexRoute: RulesIndexRoute,
+  RulesCategoryIdRoute: RulesCategoryIdRoute,
+}
+
+const RulesRouteWithChildren = RulesRoute._addFileChildren(RulesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRouteWithChildren,
   CocktailsRoute: CocktailsRouteWithChildren,
-  EmergencyRoute: EmergencyRouteWithChildren,
-  EquipmentRoute: EquipmentRouteWithChildren,
   ManualsRoute: ManualsRouteWithChildren,
+  OrganizationRoute: OrganizationRouteWithChildren,
+  RulesRoute: RulesRouteWithChildren,
+  EmployeeWorkIdRoute: EmployeeWorkIdRoute,
+  EmployeeLoginIndexRoute: EmployeeLoginIndexRoute,
+  EmployeeWorkIndexRoute: EmployeeWorkIndexRoute,
+  FavoritesIndexRoute: FavoritesIndexRoute,
+  LoginIndexRoute: LoginIndexRoute,
+  MeIndexRoute: MeIndexRoute,
+  QaIndexRoute: QaIndexRoute,
+  RecentIndexRoute: RecentIndexRoute,
+  SearchIndexRoute: SearchIndexRoute,
+  UpdatesIndexRoute: UpdatesIndexRoute,
+  ApiNotionImageBlockIdRoute: ApiNotionImageBlockIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

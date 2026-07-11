@@ -3,6 +3,7 @@ import {
   Outlet,
   Link,
   createRootRouteWithContext,
+  redirect,
   useRouter,
   HeadContent,
   Scripts,
@@ -10,7 +11,25 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { fetchAuthStatus } from "@/lib/auth-functions";
+import type { AuthStatus } from "@/lib/auth.server";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+
+const PUBLIC_PATHS = new Set(["/login"]);
+
+function buildLoginRedirectPath(location: {
+  pathname: string;
+  search: Record<string, unknown>;
+}) {
+  if (location.pathname === "/employee-login") {
+    const redirect = typeof location.search.redirect === "string" ? location.search.redirect : undefined;
+    if (redirect) {
+      return `/employee-login?redirect=${encodeURIComponent(redirect)}`;
+    }
+  }
+
+  return location.pathname;
+}
 
 function NotFoundComponent() {
   return (
@@ -68,7 +87,16 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth: AuthStatus }>()({
+  beforeLoad: async ({ location }) => {
+    const auth = await fetchAuthStatus();
+
+    if (!auth.appAuthenticated && !PUBLIC_PATHS.has(location.pathname)) {
+      throw redirect({ to: "/login", search: { redirect: buildLoginRedirectPath(location) } });
+    }
+
+    return { auth };
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },

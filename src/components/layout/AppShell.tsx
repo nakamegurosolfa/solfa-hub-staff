@@ -1,14 +1,13 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, GlassWater, BookOpen, Wrench, AlertTriangle } from "lucide-react";
+import { Home, Search, Star, User } from "lucide-react";
 import type { ReactNode } from "react";
 
 type Tab = { to: string; label: string; icon: typeof Home; exact?: boolean };
 const tabs: Tab[] = [
   { to: "/", label: "ホーム", icon: Home, exact: true },
-  { to: "/cocktails", label: "カクテル", icon: GlassWater },
-  { to: "/manuals", label: "マニュアル", icon: BookOpen },
-  { to: "/equipment", label: "機材", icon: Wrench },
-  { to: "/emergency", label: "緊急対応", icon: AlertTriangle },
+  { to: "/search", label: "検索", icon: Search },
+  { to: "/favorites", label: "お気に入り", icon: Star },
+  { to: "/me", label: "マイページ", icon: User },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -49,16 +48,25 @@ export function AppShell({ children }: { children: ReactNode }) {
 export function PageHeader({
   title,
   subtitle,
+  version,
   action,
 }: {
   title: string;
   subtitle?: string;
+  version?: string;
   action?: ReactNode;
 }) {
   return (
     <header className="mb-6 flex items-end justify-between gap-4">
-      <div className="min-w-0">
-        <h1 className="truncate text-[34px] font-bold leading-tight tracking-tight">{title}</h1>
+      <div className="min-w-0 flex-1">
+        <div className="flex min-w-0 items-baseline gap-3">
+          <h1 className="min-w-0 truncate text-[34px] font-bold leading-tight tracking-tight">{title}</h1>
+          {version ? (
+            <span className="shrink-0 pb-1 text-[11px] font-normal leading-none text-muted-foreground/60">
+              {version}
+            </span>
+          ) : null}
+        </div>
         {subtitle ? (
           <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
         ) : null}

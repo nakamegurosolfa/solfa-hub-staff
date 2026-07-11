@@ -10,6 +10,7 @@ type BaseProps = {
   trailing?: ReactNode;
   to: string;
   params?: Record<string, string>;
+  search?: Record<string, string | undefined>;
 };
 
 export function ListCard({
@@ -24,6 +25,7 @@ export function ListCard({
     <Link
       to={link.to as never}
       params={link.params as never}
+      search={link.search as never}
       className="tap group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-4 hover:bg-[var(--color-surface-2)]"
     >
       {Icon ? (
