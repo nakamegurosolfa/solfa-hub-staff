@@ -1,4 +1,4 @@
-import { createFileRoute, useRouteContext } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { z } from "zod";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
@@ -31,6 +31,7 @@ export const Route = createFileRoute("/search/")({
 function SearchPage() {
   const searchIndex = Route.useLoaderData();
   const search = Route.useSearch();
+  const navigate = useNavigate();
   const { auth } = useRouteContext({ from: "__root__" });
   const inputRef = useRef<HTMLInputElement>(null);
   const [q, setQ] = useState(search.q ?? "");
@@ -45,6 +46,13 @@ function SearchPage() {
     });
     return () => window.cancelAnimationFrame(frame);
   }, []);
+
+  const runSearch = (term: string) => {
+    const next = term.trim();
+    if (!next) return;
+    setQ(next);
+    navigate({ to: "/search", search: { q: next }, replace: true });
+  };
 
   const results = useMemo(() => {
     const term = q.trim();
@@ -62,6 +70,7 @@ function SearchPage() {
         placeholder={SEARCH_PLACEHOLDER}
         autoFocus
         inputRef={inputRef}
+        onSubmit={runSearch}
       />
 
       {results ? (

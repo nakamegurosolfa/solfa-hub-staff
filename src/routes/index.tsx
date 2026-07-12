@@ -14,9 +14,10 @@ function Home() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
-  const goToSearch = (term = query) => {
+  const goToSearch = (term: string) => {
     const q = term.trim();
-    navigate({ to: "/search", search: q ? { q } : undefined });
+    if (!q) return;
+    navigate({ to: "/search", search: { q } });
   };
 
   return (
