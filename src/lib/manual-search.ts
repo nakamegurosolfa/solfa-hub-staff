@@ -1,9 +1,12 @@
-function normalizeSearchTag(value: string): string {
+function normalizeSearchTag(value: unknown): string {
+  if (typeof value !== "string") return "";
   return value.trim().normalize("NFKC").toLowerCase();
 }
 
-function getSearchTags(item: { searchTags?: string[]; tags?: string[] }): string[] {
-  return item.searchTags ?? item.tags ?? [];
+function getSearchTags(item: { searchTags?: string[] | null; tags?: string[] | null }): string[] {
+  const raw = item.searchTags ?? item.tags ?? [];
+  if (!Array.isArray(raw)) return [];
+  return raw.filter((tag): tag is string => typeof tag === "string" && tag.trim().length > 0);
 }
 
 export type ManualSearchHit<T> = {
@@ -11,10 +14,12 @@ export type ManualSearchHit<T> = {
   matchingTag: string;
 };
 
-export function buildManualSearchHits<T extends { searchTags?: string[]; tags?: string[] }>(
-  manuals: T[],
-  query: string,
+export function buildManualSearchHits<T extends { searchTags?: string[] | null; tags?: string[] | null }>(
+  manuals: T[] | null | undefined,
+  query: unknown,
 ): ManualSearchHit<T>[] {
+  if (!Array.isArray(manuals)) return [];
+
   const normalizedQuery = normalizeSearchTag(query);
   if (!normalizedQuery) return [];
 
@@ -32,9 +37,9 @@ export function buildManualSearchHits<T extends { searchTags?: string[]; tags?: 
   return hits;
 }
 
-export function filterManualsBySearchTags<T extends { searchTags?: string[]; tags?: string[] }>(
-  manuals: T[],
-  query: string,
+export function filterManualsBySearchTags<T extends { searchTags?: string[] | null; tags?: string[] | null }>(
+  manuals: T[] | null | undefined,
+  query: unknown,
 ): T[] {
   return buildManualSearchHits(manuals, query).map((hit) => hit.item);
 }

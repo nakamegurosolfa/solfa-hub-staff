@@ -35,7 +35,7 @@ export function ManualCard({ manual }: { manual: ManualSummary }) {
           {manual.employeeOnly ? <EmployeeOnlyBadge /> : null}
         </span>
         {meta ? <span className="mt-1 block truncate text-[13px] text-muted-foreground">{meta}</span> : null}
-        {manual.searchTags.length > 0 ? (
+        {manual.searchTags?.length ? (
           <span className="mt-1 block truncate text-[12px] text-muted-foreground/80">
             {manual.searchTags.join(" · ")}
           </span>

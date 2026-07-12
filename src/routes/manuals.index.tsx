@@ -7,6 +7,7 @@ import { SectionLabel } from "@/components/ui-hub/ListCard";
 import { SearchBox } from "@/components/ui-hub/SearchBox";
 import { fetchManualIndex } from "@/lib/notion-functions";
 import { groupManualsByCategory } from "@/lib/manual-groups";
+import type { ManualSummary } from "@/lib/notion-types";
 import { buildManualSearchHits, manualAnchorId } from "@/lib/manual-search";
 
 const HIGHLIGHT_DURATION_MS = 2000;
@@ -29,7 +30,11 @@ export const Route = createFileRoute("/manuals/")({
 });
 
 function ManualsIndex() {
-  const manuals = Route.useLoaderData();
+  const loaderManuals = Route.useLoaderData();
+  const manuals = useMemo(
+    () => (Array.isArray(loaderManuals) ? loaderManuals : []) as ManualSummary[],
+    [loaderManuals],
+  );
   const [query, setQuery] = useState("");
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const highlightTimerRef = useRef<number | null>(null);
@@ -38,21 +43,30 @@ function ManualsIndex() {
   const isSearching = trimmedQuery.length > 0;
 
   const searchHits = useMemo(
-    () => (isSearching ? buildManualSearchHits(manuals, query) : []),
-    [isSearching, manuals, query],
+    () => (isSearching ? buildManualSearchHits(manuals, trimmedQuery) : []),
+    [isSearching, manuals, trimmedQuery],
   );
   const filtered = useMemo(() => searchHits.map((hit) => hit.item), [searchHits]);
-  const groups = useMemo(() => groupManualsByCategory(isSearching ? filtered : manuals), [filtered, isSearching, manuals]);
+  const groups = useMemo(
+    () => groupManualsByCategory(isSearching ? filtered : manuals),
+    [filtered, isSearching, manuals],
+  );
 
   useEffect(() => {
     return () => {
-      if (highlightTimerRef.current !== null) {
+      if (highlightTimerRef.current !== null && typeof window !== "undefined") {
         window.clearTimeout(highlightTimerRef.current);
       }
     };
   }, []);
 
+  const handleQueryChange = useCallback((value: string) => {
+    setQuery(typeof value === "string" ? value : "");
+  }, []);
+
   const scrollToManual = useCallback((manualId: string) => {
+    if (typeof window === "undefined" || !manualId) return;
+
     const target = document.getElementById(manualAnchorId(manualId));
     if (!target) return;
 
@@ -73,7 +87,7 @@ function ManualsIndex() {
     <AppShell>
       <PageHeader title="業務マニュアル" subtitle="営業・受付・バー・清掃" />
 
-      <SearchBox value={query} onChange={setQuery} placeholder="検索タグで絞り込み" />
+      <SearchBox value={query} onChange={handleQueryChange} placeholder="検索タグで絞り込み" />
 
       <div className="mt-6 flex flex-col gap-6">
         {isSearching ? (
