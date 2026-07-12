@@ -1,12 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { ManualCard } from "@/components/ui-hub/ManualCard";
+import { ManualSearchResultCard } from "@/components/ui-hub/ManualSearchResultCard";
 import { SectionLabel } from "@/components/ui-hub/ListCard";
 import { SearchBox } from "@/components/ui-hub/SearchBox";
 import { fetchManualIndex } from "@/lib/notion-functions";
 import { groupManualsByCategory } from "@/lib/manual-groups";
-import { filterManualsBySearchTags } from "@/lib/manual-search";
+import { buildManualSearchHits, manualAnchorId } from "@/lib/manual-search";
+
+const HIGHLIGHT_DURATION_MS = 2000;
 
 export const Route = createFileRoute("/manuals/")({
   loader: () => fetchManualIndex(),
@@ -28,10 +31,43 @@ export const Route = createFileRoute("/manuals/")({
 function ManualsIndex() {
   const manuals = Route.useLoaderData();
   const [query, setQuery] = useState("");
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
+  const highlightTimerRef = useRef<number | null>(null);
 
-  const filtered = useMemo(() => filterManualsBySearchTags(manuals, query), [manuals, query]);
-  const groups = useMemo(() => groupManualsByCategory(filtered), [filtered]);
   const trimmedQuery = query.trim();
+  const isSearching = trimmedQuery.length > 0;
+
+  const searchHits = useMemo(
+    () => (isSearching ? buildManualSearchHits(manuals, query) : []),
+    [isSearching, manuals, query],
+  );
+  const filtered = useMemo(() => searchHits.map((hit) => hit.item), [searchHits]);
+  const groups = useMemo(() => groupManualsByCategory(isSearching ? filtered : manuals), [filtered, isSearching, manuals]);
+
+  useEffect(() => {
+    return () => {
+      if (highlightTimerRef.current !== null) {
+        window.clearTimeout(highlightTimerRef.current);
+      }
+    };
+  }, []);
+
+  const scrollToManual = useCallback((manualId: string) => {
+    const target = document.getElementById(manualAnchorId(manualId));
+    if (!target) return;
+
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    if (highlightTimerRef.current !== null) {
+      window.clearTimeout(highlightTimerRef.current);
+    }
+
+    setHighlightedId(manualId);
+    highlightTimerRef.current = window.setTimeout(() => {
+      setHighlightedId(null);
+      highlightTimerRef.current = null;
+    }, HIGHLIGHT_DURATION_MS);
+  }, []);
 
   return (
     <AppShell>
@@ -40,9 +76,59 @@ function ManualsIndex() {
       <SearchBox value={query} onChange={setQuery} placeholder="検索タグで絞り込み" />
 
       <div className="mt-6 flex flex-col gap-6">
-        {filtered.length === 0 ? (
+        {isSearching ? (
+          searchHits.length === 0 ? (
+            <p className="rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-6 text-center text-sm text-muted-foreground">
+              該当する業務マニュアルがありません
+            </p>
+          ) : (
+            <>
+              <section>
+                <SectionLabel>検索結果</SectionLabel>
+                <div className="flex flex-col gap-3">
+                  {searchHits.map((hit) => (
+                    <ManualSearchResultCard
+                      key={hit.item.id}
+                      manual={hit.item}
+                      excerpt={hit.matchingTag}
+                      onSelect={scrollToManual}
+                    />
+                  ))}
+                </div>
+              </section>
+
+              <section>
+                <SectionLabel>マニュアル一覧</SectionLabel>
+                <div className="flex flex-col gap-6">
+                  {groupManualsByCategory(filtered).map((group) => (
+                    <div key={group.category}>
+                      <h3 className="mb-2 px-1 text-xs font-semibold tracking-wider text-muted-foreground/80">
+                        {group.category}
+                      </h3>
+                      <div className="flex flex-col gap-3">
+                        {group.items.map((manual) => (
+                          <div
+                            key={manual.id}
+                            id={manualAnchorId(manual.id)}
+                            className={`scroll-mt-24 rounded-3xl transition-[box-shadow,background-color] duration-500 ${
+                              highlightedId === manual.id
+                                ? "bg-primary/10 ring-2 ring-primary/50"
+                                : "ring-2 ring-transparent"
+                            }`}
+                          >
+                            <ManualCard manual={manual} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </>
+          )
+        ) : groups.length === 0 ? (
           <p className="rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-6 text-center text-sm text-muted-foreground">
-            {trimmedQuery ? "該当する業務マニュアルがありません" : "マニュアルが見つかりません。"}
+            マニュアルが見つかりません。
           </p>
         ) : (
           groups.map((group) => (
