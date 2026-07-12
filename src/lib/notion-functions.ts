@@ -10,7 +10,6 @@ import { getManualDetail, getManualList } from "@/lib/notion-manuals.server";
 import { prepareManualsForIndex, sortManualsByDisplayOrder } from "@/lib/manual-groups";
 import { getQaList } from "@/lib/notion-qa.server";
 import { resolveOrganizationAccessMetadata, resolvePageAccessMetadata } from "@/lib/page-access";
-import { buildSearchIndex } from "@/lib/search-index";
 import { buildUpdateHistory } from "@/lib/update-history";
 
 export const fetchPageAccessMetadata = createServerFn({ method: "GET" })
@@ -53,11 +52,6 @@ export const fetchOrganizationPage = createServerFn({ method: "GET" }).handler(a
   const access = await resolveOrganizationAccessMetadata();
   await assertEmployeeContentAccess(access.title);
   return getOrganizationPageContent();
-});
-
-export const fetchSearchIndex = createServerFn({ method: "GET" }).handler(async () => {
-  await requireAppAuth();
-  return buildSearchIndex();
 });
 
 export const fetchCocktailIndex = createServerFn({ method: "GET" }).handler(async () => {

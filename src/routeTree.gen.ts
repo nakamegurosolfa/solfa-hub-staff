@@ -16,7 +16,6 @@ import { Route as CocktailsRouteImport } from './routes/cocktails'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UpdatesIndexRouteImport } from './routes/updates.index'
-import { Route as SearchIndexRouteImport } from './routes/search.index'
 import { Route as RulesIndexRouteImport } from './routes/rules.index'
 import { Route as RecentIndexRouteImport } from './routes/recent.index'
 import { Route as QaIndexRouteImport } from './routes/qa.index'
@@ -70,11 +69,6 @@ const IndexRoute = IndexRouteImport.update({
 const UpdatesIndexRoute = UpdatesIndexRouteImport.update({
   id: '/updates/',
   path: '/updates/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SearchIndexRoute = SearchIndexRouteImport.update({
-  id: '/search/',
-  path: '/search/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RulesIndexRoute = RulesIndexRouteImport.update({
@@ -196,7 +190,6 @@ export interface FileRoutesByFullPath {
   '/qa/': typeof QaIndexRoute
   '/recent/': typeof RecentIndexRoute
   '/rules/': typeof RulesIndexRoute
-  '/search/': typeof SearchIndexRoute
   '/updates/': typeof UpdatesIndexRoute
   '/about/category/$id': typeof AboutCategoryIdRoute
   '/api/notion-image/$blockId': typeof ApiNotionImageBlockIdRoute
@@ -220,7 +213,6 @@ export interface FileRoutesByTo {
   '/qa': typeof QaIndexRoute
   '/recent': typeof RecentIndexRoute
   '/rules': typeof RulesIndexRoute
-  '/search': typeof SearchIndexRoute
   '/updates': typeof UpdatesIndexRoute
   '/about/category/$id': typeof AboutCategoryIdRoute
   '/api/notion-image/$blockId': typeof ApiNotionImageBlockIdRoute
@@ -250,7 +242,6 @@ export interface FileRoutesById {
   '/qa/': typeof QaIndexRoute
   '/recent/': typeof RecentIndexRoute
   '/rules/': typeof RulesIndexRoute
-  '/search/': typeof SearchIndexRoute
   '/updates/': typeof UpdatesIndexRoute
   '/about/category/$id': typeof AboutCategoryIdRoute
   '/api/notion-image/$blockId': typeof ApiNotionImageBlockIdRoute
@@ -281,7 +272,6 @@ export interface FileRouteTypes {
     | '/qa/'
     | '/recent/'
     | '/rules/'
-    | '/search/'
     | '/updates/'
     | '/about/category/$id'
     | '/api/notion-image/$blockId'
@@ -305,7 +295,6 @@ export interface FileRouteTypes {
     | '/qa'
     | '/recent'
     | '/rules'
-    | '/search'
     | '/updates'
     | '/about/category/$id'
     | '/api/notion-image/$blockId'
@@ -334,7 +323,6 @@ export interface FileRouteTypes {
     | '/qa/'
     | '/recent/'
     | '/rules/'
-    | '/search/'
     | '/updates/'
     | '/about/category/$id'
     | '/api/notion-image/$blockId'
@@ -356,7 +344,6 @@ export interface RootRouteChildren {
   MeIndexRoute: typeof MeIndexRoute
   QaIndexRoute: typeof QaIndexRoute
   RecentIndexRoute: typeof RecentIndexRoute
-  SearchIndexRoute: typeof SearchIndexRoute
   UpdatesIndexRoute: typeof UpdatesIndexRoute
   ApiNotionImageBlockIdRoute: typeof ApiNotionImageBlockIdRoute
 }
@@ -410,13 +397,6 @@ declare module '@tanstack/react-router' {
       path: '/updates'
       fullPath: '/updates/'
       preLoaderRoute: typeof UpdatesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/search/': {
-      id: '/search/'
-      path: '/search'
-      fullPath: '/search/'
-      preLoaderRoute: typeof SearchIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rules/': {
@@ -635,7 +615,6 @@ const rootRouteChildren: RootRouteChildren = {
   MeIndexRoute: MeIndexRoute,
   QaIndexRoute: QaIndexRoute,
   RecentIndexRoute: RecentIndexRoute,
-  SearchIndexRoute: SearchIndexRoute,
   UpdatesIndexRoute: UpdatesIndexRoute,
   ApiNotionImageBlockIdRoute: ApiNotionImageBlockIdRoute,
 }

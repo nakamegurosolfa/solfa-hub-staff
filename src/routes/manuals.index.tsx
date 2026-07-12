@@ -1,9 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { ManualCard } from "@/components/ui-hub/ManualCard";
 import { SectionLabel } from "@/components/ui-hub/ListCard";
+import { SearchBox } from "@/components/ui-hub/SearchBox";
 import { fetchManualIndex } from "@/lib/notion-functions";
 import { groupManualsByCategory } from "@/lib/manual-groups";
+import { filterManualsBySearchTags } from "@/lib/manual-search";
 
 export const Route = createFileRoute("/manuals/")({
   loader: () => fetchManualIndex(),
@@ -24,19 +27,25 @@ export const Route = createFileRoute("/manuals/")({
 
 function ManualsIndex() {
   const manuals = Route.useLoaderData();
-  const groups = groupManualsByCategory(manuals);
+  const [query, setQuery] = useState("");
+
+  const filtered = useMemo(() => filterManualsBySearchTags(manuals, query), [manuals, query]);
+  const groups = useMemo(() => groupManualsByCategory(filtered), [filtered]);
+  const trimmedQuery = query.trim();
 
   return (
     <AppShell>
       <PageHeader title="業務マニュアル" subtitle="営業・受付・バー・清掃" />
 
-      {groups.length === 0 ? (
-        <p className="rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-6 text-center text-sm text-muted-foreground">
-          マニュアルが見つかりません。
-        </p>
-      ) : (
-        <div className="flex flex-col gap-6">
-          {groups.map((group) => (
+      <SearchBox value={query} onChange={setQuery} placeholder="検索タグで絞り込み" />
+
+      <div className="mt-6 flex flex-col gap-6">
+        {filtered.length === 0 ? (
+          <p className="rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-6 text-center text-sm text-muted-foreground">
+            {trimmedQuery ? "該当する業務マニュアルがありません" : "マニュアルが見つかりません。"}
+          </p>
+        ) : (
+          groups.map((group) => (
             <section key={group.category}>
               <SectionLabel>{group.category}</SectionLabel>
               <div className="flex flex-col gap-3">
@@ -45,9 +54,9 @@ function ManualsIndex() {
                 ))}
               </div>
             </section>
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </AppShell>
   );
 }

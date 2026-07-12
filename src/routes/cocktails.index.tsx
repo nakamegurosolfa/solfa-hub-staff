@@ -4,7 +4,7 @@ import { z } from "zod";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { CocktailCard } from "@/components/ui-hub/CocktailCard";
 import { SectionLabel } from "@/components/ui-hub/ListCard";
-import { SearchBar } from "@/components/ui-hub/SearchBar";
+import { SearchBox } from "@/components/ui-hub/SearchBox";
 import { filterCocktails } from "@/lib/cocktail-search";
 import { fetchCocktailIndex } from "@/lib/notion-functions";
 
@@ -47,7 +47,7 @@ function CocktailsIndex() {
     <AppShell>
       <PageHeader title="カクテルレシピ" subtitle="ドリンクレシピ・材料・作り方" />
 
-      <SearchBar
+      <SearchBox
         value={query}
         onChange={setQuery}
         placeholder="カクテル名・材料・グラス・氷などで検索"

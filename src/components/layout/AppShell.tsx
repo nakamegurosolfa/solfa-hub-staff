@@ -1,11 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Search, Star, User } from "lucide-react";
+import { Home, Star, User } from "lucide-react";
 import type { ReactNode } from "react";
 
 type Tab = { to: string; label: string; icon: typeof Home; exact?: boolean };
 const tabs: Tab[] = [
   { to: "/", label: "ホーム", icon: Home, exact: true },
-  { to: "/search", label: "検索", icon: Search },
   { to: "/favorites", label: "お気に入り", icon: Star },
   { to: "/me", label: "マイページ", icon: User },
 ];

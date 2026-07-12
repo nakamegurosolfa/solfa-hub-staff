@@ -28,10 +28,6 @@ export const APP_VERSION = "ver.1.1.0";
 
 export const APP_TAGLINE = "あなたの業務をいつでもサポートします。";
 
-export const SEARCH_PLACEHOLDER = "カクテル・マニュアルを検索";
-
-export const HOME_SEARCH_BUTTON_LABEL = "カクテル・マニュアルを検索する";
-
 export const homeSections: HomeSection[] = [
   {
     id: "cocktails",

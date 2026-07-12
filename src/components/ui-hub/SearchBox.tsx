@@ -15,12 +15,10 @@ function readSearchValue(form: HTMLFormElement) {
   return "";
 }
 
-export function SearchBar({
+export function SearchBox({
   value,
   onChange,
   placeholder = "Search",
-  readOnly = false,
-  onActivate,
   autoFocus = false,
   onSubmit,
   inputRef,
@@ -28,26 +26,10 @@ export function SearchBar({
   value: string;
   onChange: (v: string) => void;
   placeholder?: string;
-  readOnly?: boolean;
-  onActivate?: () => void;
   autoFocus?: boolean;
   onSubmit?: (value: string) => void;
   inputRef?: Ref<HTMLInputElement>;
 }) {
-  if (readOnly && onActivate) {
-    return (
-      <button
-        type="button"
-        onClick={onActivate}
-        className={`${shellClassName} w-full touch-manipulation text-left`}
-        aria-label={placeholder}
-      >
-        <Search className="pointer-events-none h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
-        <span className="pointer-events-none min-w-0 flex-1 text-base text-muted-foreground">{placeholder}</span>
-      </button>
-    );
-  }
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!onSubmit) return;
@@ -79,7 +61,7 @@ export function SearchBar({
         enterKeyHint="search"
         autoComplete="off"
         inputMode="search"
-        style={{ fontSize: "16px" }}
+        style={{ fontSize: "16px", WebkitAppearance: "none" }}
       />
     </form>
   );
