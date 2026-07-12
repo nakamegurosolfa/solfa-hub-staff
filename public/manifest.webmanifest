@@ -1,6 +1,6 @@
 {
-  "name": "solfa HUB",
-  "short_name": "solfa HUB",
+  "name": "solfa MANUAL APP",
+  "short_name": "solfa MANUAL",
   "description": "Internal staff hub for solfa — Tokyo nightclub & live venue.",
   "start_url": "/",
   "scope": "/",
@@ -9,7 +9,9 @@
   "background_color": "#111111",
   "theme_color": "#111111",
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
