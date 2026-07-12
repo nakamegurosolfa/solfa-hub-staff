@@ -2,24 +2,15 @@ import { createFileRoute, useNavigate, useRouteContext } from "@tanstack/react-r
 import { useEffect, useMemo, useRef, useState } from "react";
 import { z } from "zod";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
-import { EmployeeOnlyBadge } from "@/components/auth/PasswordGateScreen";
 import { SearchBar } from "@/components/ui-hub/SearchBar";
-import { ListCard, SectionLabel } from "@/components/ui-hub/ListCard";
+import { SearchResultsList } from "@/components/ui-hub/SearchResultsList";
 import { SEARCH_PLACEHOLDER } from "@/data/app-sections";
-import { filterSearchIndex, type SearchHit } from "@/lib/search-index";
 import { fetchSearchIndex } from "@/lib/notion-functions";
+import { filterSearchIndex } from "@/lib/search-index";
 
 const searchPageSchema = z.object({
   q: z.string().optional(),
 });
-
-function resultRedirectPath(result: SearchHit) {
-  if (result.to === "/organization") return "/organization";
-  if (result.params?.id) {
-    return result.to.replace("$id", result.params.id);
-  }
-  return result.to;
-}
 
 export const Route = createFileRoute("/search/")({
   validateSearch: searchPageSchema,
@@ -54,11 +45,11 @@ function SearchPage() {
     navigate({ to: "/search", search: { q: next }, replace: true });
   };
 
+  const trimmedQuery = q.trim();
   const results = useMemo(() => {
-    const term = q.trim();
-    if (!term) return null;
-    return filterSearchIndex(searchIndex, term);
-  }, [q, searchIndex]);
+    if (!trimmedQuery) return null;
+    return filterSearchIndex(searchIndex, trimmedQuery);
+  }, [q, searchIndex, trimmedQuery]);
 
   return (
     <AppShell>
@@ -74,31 +65,13 @@ function SearchPage() {
       />
 
       {results ? (
-        <>
-          <SectionLabel>{results.length}件の結果</SectionLabel>
-          <div className="flex flex-col gap-2">
-            {results.length === 0 ? (
-              <p className="rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-6 text-center text-sm text-muted-foreground">
-                「{q}」に一致する項目はありません。
-              </p>
-            ) : (
-              results.map((result) => {
-                const needsEmployeeAuth = result.employeeOnly && !auth.employeeAuthenticated;
-                return (
-                  <ListCard
-                    key={result.id}
-                    to={needsEmployeeAuth ? "/employee-login" : result.to}
-                    params={needsEmployeeAuth ? undefined : result.params}
-                    search={needsEmployeeAuth ? { redirect: resultRedirectPath(result) } : undefined}
-                    title={result.title}
-                    subtitle={result.subtitle}
-                    trailing={result.employeeOnly ? <EmployeeOnlyBadge /> : undefined}
-                  />
-                );
-              })
-            )}
-          </div>
-        </>
+        <div className="mt-6">
+          <SearchResultsList
+            results={results}
+            employeeAuthenticated={auth.employeeAuthenticated}
+            emptyMessage={`「${trimmedQuery}」に一致する項目はありません。`}
+          />
+        </div>
       ) : (
         <p className="mt-6 rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-6 text-center text-sm text-muted-foreground">
           キーワードを入力して検索してください。

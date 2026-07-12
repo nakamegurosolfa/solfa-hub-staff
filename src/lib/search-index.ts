@@ -10,8 +10,10 @@ import { cocktailSearchText } from "@/lib/cocktail-search";
 import { manualSearchText } from "@/lib/manual-search";
 import { getCocktailList } from "@/lib/notion-cocktails.server";
 import { getManualDetail, getManualList } from "@/lib/notion-manuals.server";
+import { getQaList } from "@/lib/notion-qa.server";
 import { getManualPageContent, getManualPageList } from "@/lib/notion.server";
 import { makePageId } from "@/lib/page-library";
+import { matchesSearchQuery, normalizeSearchText } from "@/lib/search-normalize";
 
 export type SearchHit = {
   id: string;
@@ -22,6 +24,14 @@ export type SearchHit = {
   searchText: string;
   employeeOnly?: boolean;
 };
+
+export function searchHitRedirectPath(hit: SearchHit) {
+  if (hit.to === "/organization") return "/organization";
+  if (hit.params?.id) {
+    return hit.to.replace("$id", hit.params.id);
+  }
+  return hit.to;
+}
 
 function staticCategoryHits(
   section: AppSectionId,
@@ -67,6 +77,24 @@ export async function buildSearchIndex(): Promise<SearchHit[]> {
       params: { id: manual.id },
       employeeOnly: manual.employeeOnly,
       searchText: detail ? manualSearchText(manual, detail.blocks) : manual.title,
+    });
+  }
+
+  const qaItems = await getQaList();
+  for (const item of qaItems) {
+    hits.push({
+      id: `qa:${item.id}`,
+      title: item.question,
+      subtitle: `Q&A · ${item.category}`,
+      to: "/manuals/$id",
+      params: { id: item.manualId },
+      searchText: [
+        item.question,
+        item.category,
+        manualSearchText({ title: "", searchTags: [] }, item.answerBlocks),
+      ]
+        .filter(Boolean)
+        .join(" "),
     });
   }
 
@@ -117,8 +145,13 @@ export async function buildSearchIndex(): Promise<SearchHit[]> {
 }
 
 export function filterSearchIndex(hits: SearchHit[], query: string) {
-  const term = query.trim().toLowerCase();
+  const term = normalizeSearchText(query);
   if (!term) return [];
 
-  return hits.filter((hit) => hit.searchText.toLowerCase().includes(term) || hit.title.toLowerCase().includes(term));
+  return hits.filter(
+    (hit) =>
+      matchesSearchQuery(hit.searchText, term) ||
+      matchesSearchQuery(hit.title, term) ||
+      matchesSearchQuery(hit.subtitle, term),
+  );
 }
