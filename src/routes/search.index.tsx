@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useRouteContext } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { z } from "zod";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { SearchBar } from "@/components/ui-hub/SearchBar";
@@ -25,10 +25,12 @@ function SearchPage() {
   const navigate = useNavigate();
   const { auth } = useRouteContext({ from: "__root__" });
   const inputRef = useRef<HTMLInputElement>(null);
-  const [q, setQ] = useState(search.q ?? "");
+  const [query, setQuery] = useState(search.q ?? "");
+  const deferredQuery = useDeferredValue(query.trim());
+  const isFiltering = query.trim() !== deferredQuery;
 
   useEffect(() => {
-    setQ(search.q ?? "");
+    setQuery(search.q ?? "");
   }, [search.q]);
 
   useEffect(() => {
@@ -38,39 +40,41 @@ function SearchPage() {
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
-  const runSearch = (term: string) => {
+  const syncSearchUrl = (term: string) => {
     const next = term.trim();
-    if (!next) return;
-    setQ(next);
-    navigate({ to: "/search", search: { q: next }, replace: true });
+    navigate({
+      to: "/search",
+      search: next ? { q: next } : {},
+      replace: true,
+    });
   };
 
-  const trimmedQuery = q.trim();
+  const handleSubmit = (term: string) => {
+    setQuery(term);
+    syncSearchUrl(term);
+  };
+
   const results = useMemo(() => {
-    if (!trimmedQuery) return null;
-    return filterSearchIndex(searchIndex, trimmedQuery);
-  }, [q, searchIndex, trimmedQuery]);
+    if (!deferredQuery) return null;
+    return filterSearchIndex(searchIndex, deferredQuery);
+  }, [deferredQuery, searchIndex]);
 
   return (
     <AppShell>
-      <PageHeader title="検索" subtitle="カクテル・マニュアル・ルールなど横断検索" />
+      <PageHeader title="検索" subtitle="カクテル・マニュアル・Q&A・社員業務を横断検索" />
 
       <SearchBar
-        value={q}
-        onChange={setQ}
+        value={query}
+        onChange={setQuery}
         placeholder={SEARCH_PLACEHOLDER}
         autoFocus
         inputRef={inputRef}
-        onSubmit={runSearch}
+        onSubmit={handleSubmit}
       />
 
       {results ? (
-        <div className="mt-6">
-          <SearchResultsList
-            results={results}
-            employeeAuthenticated={auth.employeeAuthenticated}
-            emptyMessage={`「${trimmedQuery}」に一致する項目はありません。`}
-          />
+        <div className={`mt-6 ${isFiltering ? "opacity-80" : ""}`}>
+          <SearchResultsList results={results} employeeAuthenticated={auth.employeeAuthenticated} />
         </div>
       ) : (
         <p className="mt-6 rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-6 text-center text-sm text-muted-foreground">

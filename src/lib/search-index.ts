@@ -1,6 +1,7 @@
 import {
   aboutCategories,
   classifyNotionPageTitle,
+  EMPLOYEE_WORK_LABEL,
   sectionLabels,
   shopRulesCategories,
   type AppSectionId,
@@ -9,6 +10,7 @@ import { hasEmployeeAuth } from "@/lib/auth.server";
 import { cocktailSearchText } from "@/lib/cocktail-search";
 import { manualSearchText } from "@/lib/manual-search";
 import { getCocktailList } from "@/lib/notion-cocktails.server";
+import { getEmployeeWorkDetail, getEmployeeWorkList } from "@/lib/notion-employee-work.server";
 import { getManualDetail, getManualList } from "@/lib/notion-manuals.server";
 import { getQaList } from "@/lib/notion-qa.server";
 import { getManualPageContent, getManualPageList } from "@/lib/notion.server";
@@ -96,6 +98,22 @@ export async function buildSearchIndex(): Promise<SearchHit[]> {
         .filter(Boolean)
         .join(" "),
     });
+  }
+
+  if (employeeAuthenticated) {
+    const employeeWorkItems = await getEmployeeWorkList();
+    for (const item of employeeWorkItems) {
+      const detail = await getEmployeeWorkDetail(item.id);
+      hits.push({
+        id: makePageId("/employee-work/$id", { id: item.id }),
+        title: item.title,
+        subtitle: item.category ? `${EMPLOYEE_WORK_LABEL} · ${item.category}` : EMPLOYEE_WORK_LABEL,
+        to: "/employee-work/$id",
+        params: { id: item.id },
+        employeeOnly: true,
+        searchText: manualSearchText(item, detail.blocks),
+      });
+    }
   }
 
   hits.push(
