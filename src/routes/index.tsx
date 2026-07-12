@@ -1,28 +1,20 @@
 import { ChevronRight } from "lucide-react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { EmployeeWorkHomeCard } from "@/components/ui-hub/EmployeeWorkHomeCard";
-import { SearchBar } from "@/components/ui-hub/SearchBar";
-import { APP_TAGLINE, APP_VERSION, homeSections, SEARCH_PLACEHOLDER } from "@/data/app-sections";
+import { HomeSearchButton } from "@/components/ui-hub/HomeSearchButton";
+import { APP_TAGLINE, APP_VERSION, homeSections } from "@/data/app-sections";
 
 export const Route = createFileRoute("/")({
   component: Home,
 });
 
 function Home() {
-  const navigate = useNavigate();
-
   return (
     <AppShell>
       <PageHeader title="solfa MANUAL APP" version={APP_VERSION} subtitle={APP_TAGLINE} />
 
-      <SearchBar
-        value=""
-        onChange={() => undefined}
-        placeholder={SEARCH_PLACEHOLDER}
-        readOnly
-        onActivate={() => navigate({ to: "/search" })}
-      />
+      <HomeSearchButton />
 
       <div className="mt-6 flex flex-col gap-3">
         {homeSections.map((section) => (
