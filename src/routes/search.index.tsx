@@ -1,5 +1,6 @@
 import { createFileRoute, useRouteContext } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { z } from "zod";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { EmployeeOnlyBadge } from "@/components/auth/PasswordGateScreen";
 import { SearchBar } from "@/components/ui-hub/SearchBar";
@@ -7,6 +8,10 @@ import { ListCard, SectionLabel } from "@/components/ui-hub/ListCard";
 import { SEARCH_PLACEHOLDER } from "@/data/app-sections";
 import { filterSearchIndex, type SearchHit } from "@/lib/search-index";
 import { fetchSearchIndex } from "@/lib/notion-functions";
+
+const searchPageSchema = z.object({
+  q: z.string().optional(),
+});
 
 function resultRedirectPath(result: SearchHit) {
   if (result.to === "/organization") return "/organization";
@@ -17,6 +22,7 @@ function resultRedirectPath(result: SearchHit) {
 }
 
 export const Route = createFileRoute("/search/")({
+  validateSearch: searchPageSchema,
   loader: () => fetchSearchIndex(),
   head: () => ({ meta: [{ title: "検索 — solfa MANUAL APP" }] }),
   component: SearchPage,
@@ -24,8 +30,21 @@ export const Route = createFileRoute("/search/")({
 
 function SearchPage() {
   const searchIndex = Route.useLoaderData();
+  const search = Route.useSearch();
   const { auth } = useRouteContext({ from: "__root__" });
-  const [q, setQ] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [q, setQ] = useState(search.q ?? "");
+
+  useEffect(() => {
+    setQ(search.q ?? "");
+  }, [search.q]);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      inputRef.current?.focus();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   const results = useMemo(() => {
     const term = q.trim();
@@ -37,7 +56,13 @@ function SearchPage() {
     <AppShell>
       <PageHeader title="検索" subtitle="カクテル・マニュアル・ルールなど横断検索" />
 
-      <SearchBar value={q} onChange={setQ} placeholder={SEARCH_PLACEHOLDER} autoFocus />
+      <SearchBar
+        value={q}
+        onChange={setQ}
+        placeholder={SEARCH_PLACEHOLDER}
+        autoFocus
+        inputRef={inputRef}
+      />
 
       {results ? (
         <>

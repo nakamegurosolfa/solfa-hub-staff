@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { EmployeeWorkHomeCard } from "@/components/ui-hub/EmployeeWorkHomeCard";
 import { SearchBar } from "@/components/ui-hub/SearchBar";
@@ -11,17 +12,22 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+
+  const goToSearch = (term = query) => {
+    const q = term.trim();
+    navigate({ to: "/search", search: q ? { q } : undefined });
+  };
 
   return (
     <AppShell>
       <PageHeader title="solfa MANUAL APP" version={APP_VERSION} subtitle={APP_TAGLINE} />
 
       <SearchBar
-        value=""
-        onChange={() => undefined}
+        value={query}
+        onChange={setQuery}
         placeholder={SEARCH_PLACEHOLDER}
-        readOnly
-        onActivate={() => navigate({ to: "/search" })}
+        onSubmit={goToSearch}
       />
 
       <div className="mt-6 flex flex-col gap-3">
