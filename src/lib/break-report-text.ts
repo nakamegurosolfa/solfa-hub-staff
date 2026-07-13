@@ -57,6 +57,8 @@ function formatStaffSection(staff: StaffMember): string {
   return lines.join("\n");
 }
 
+export const BREAK_REPORT_FORMAT_VERSION = "jst-v2-utc-offset";
+
 export function buildBreakReportEmailSubject(businessDate: string): string {
   return `【solfa 休憩管理】${formatBusinessDateShortLabel(businessDate)}営業分`;
 }

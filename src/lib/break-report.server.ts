@@ -10,8 +10,10 @@ import {
 import {
   buildBreakReportEmailBody,
   buildBreakReportEmailSubject,
+  BREAK_REPORT_FORMAT_VERSION,
 } from "@/lib/break-report-text";
 import { getRuntimeEnv } from "@/lib/notion-env";
+import { formatIsoTimeInTokyo, formatTokyoSentAtLabel } from "@/lib/tokyo-time";
 
 const MAX_STAFF_COUNT = 100;
 const MAX_NAME_LENGTH = 50;
@@ -132,18 +134,39 @@ export async function sendBreakReportEmail(input: BreakReportInput): Promise<Bre
     const subject = buildBreakReportEmailSubject(parsed.businessDate);
     const text = buildBreakReportEmailBody(parsed.businessDate, staff, sentAt);
 
+    const resendPayload = {
+      from: readResendFromEmail(),
+      to: [readBreakReportToEmail()],
+      subject,
+      text,
+    };
+
+    const firstBreak = staff[0]?.breaks[0];
+    console.log("[break-report] Resend outbound payload", {
+      formatVersion: BREAK_REPORT_FORMAT_VERSION,
+      serverFn: "sendBreakReport",
+      serverFnRoute: "/_serverFn/{id}",
+      sourceFiles: ["break-functions.ts", "break-report.server.ts", "break-report-text.ts", "tokyo-time.ts"],
+      payloadFields: ["from", "to", "subject", "text"],
+      sentAtIso: sentAt.toISOString(),
+      sentAtFormatted: formatTokyoSentAtLabel(sentAt),
+      firstBreakStartIso: firstBreak?.startAt ?? null,
+      firstBreakStartFormatted: formatIsoTimeInTokyo(firstBreak?.startAt ?? null),
+      firstBreakEndIso: firstBreak?.endAt ?? null,
+      firstBreakEndFormatted: formatIsoTimeInTokyo(firstBreak?.endAt ?? null),
+      subject,
+      text,
+      payload: resendPayload,
+    });
+    console.log("[break-report] Resend text body:\n", text);
+
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${readResendApiKey()}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        from: readResendFromEmail(),
-        to: [readBreakReportToEmail()],
-        subject,
-        text,
-      }),
+      body: JSON.stringify(resendPayload),
     });
 
     const responseBody = await response.text();
