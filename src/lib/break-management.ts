@@ -1,3 +1,5 @@
+import { formatTokyoTimeHhmm } from "@/lib/tokyo-time";
+
 export const BREAK_SLOT_COUNT = 4;
 export const BREAKS_STORAGE_KEY = "solfa-break-management";
 export const BREAKS_EVENT = "solfa-break-management-change";
@@ -80,18 +82,14 @@ export function formatTimeLabel(iso: string | null): string {
   if (!iso) return "—";
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "—";
-  const h = String(date.getHours()).padStart(2, "0");
-  const m = String(date.getMinutes()).padStart(2, "0");
-  return `${h}:${m}`;
+  return formatTokyoTimeHhmm(date);
 }
 
 export function formatTimeInputValue(iso: string | null): string {
   if (!iso) return "";
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "";
-  const h = String(date.getHours()).padStart(2, "0");
-  const m = String(date.getMinutes()).padStart(2, "0");
-  return `${h}:${m}`;
+  return formatTokyoTimeHhmm(date);
 }
 
 export function buildIsoFromDateAndTime(dateKey: string, hhmm: string): string | null {

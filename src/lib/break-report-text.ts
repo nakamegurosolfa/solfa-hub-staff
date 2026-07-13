@@ -8,6 +8,7 @@ import {
   getTotalCompletedMinutes,
   parseDateKey,
 } from "@/lib/break-management";
+import { formatTokyoSentAtLabel } from "@/lib/tokyo-time";
 
 const SLOT_LABELS = ["①", "②", "③", "④"] as const;
 
@@ -17,12 +18,7 @@ export function formatBusinessDateShortLabel(dateKey: string): string {
 }
 
 export function formatSentAtLabel(date: Date): string {
-  const y = date.getFullYear();
-  const m = date.getMonth() + 1;
-  const d = date.getDate();
-  const h = String(date.getHours()).padStart(2, "0");
-  const min = String(date.getMinutes()).padStart(2, "0");
-  return `${y}年${m}月${d}日 ${h}:${min}`;
+  return formatTokyoSentAtLabel(date);
 }
 
 export function formatBreakSlotForReport(entry: BreakEntry): string {
