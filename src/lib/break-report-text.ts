@@ -59,18 +59,24 @@ function formatStaffSection(staff: StaffMember): string {
   return lines.join("\n");
 }
 
-export const BREAK_REPORT_FORMAT_VERSION = "jst-v3-tokyo-storage";
+export const BREAK_REPORT_FORMAT_VERSION = "jst-v4-intl-display";
 
 export function buildBreakReportEmailSubject(businessDate: string): string {
   return `【solfa 休憩管理】${formatBusinessDateShortLabel(businessDate)}営業分`;
 }
 
-export function buildBreakReportEmailBody(businessDate: string, staff: StaffMember[], sentAt: Date): string {
+export function buildBreakReportEmailBody(
+  businessDate: string,
+  staff: StaffMember[],
+  sentAt: Date,
+): string {
   const sections = staff.map((member) => formatStaffSection(member));
   const body = [
     `営業日：${formatBusinessDateShortLabel(businessDate)}`,
     "",
-    ...sections.flatMap((section, index) => (index < sections.length - 1 ? [section, ""] : [section])),
+    ...sections.flatMap((section, index) =>
+      index < sections.length - 1 ? [section, ""] : [section],
+    ),
     "",
     `スタッフ数：${staff.length}名`,
     `送信日時：${formatSentAtLabel(sentAt)}`,

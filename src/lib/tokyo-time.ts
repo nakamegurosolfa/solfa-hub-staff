@@ -12,14 +12,31 @@ type TokyoDateParts = {
   minute: number;
 };
 
+type TokyoPartType = "year" | "month" | "day" | "hour" | "minute";
+
+function readTokyoPart(parts: Intl.DateTimeFormatPart[], type: TokyoPartType): number {
+  const value = parts.find((part) => part.type === type)?.value ?? "";
+  return Number(value);
+}
+
+/** Read wall-clock components in Asia/Tokyo regardless of server runtime timezone. */
 function getTokyoParts(date: Date): TokyoDateParts {
-  const jst = new Date(date.getTime() + JST_OFFSET_MS);
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TOKYO_TIME_ZONE,
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(date);
+
   return {
-    year: jst.getUTCFullYear(),
-    month: jst.getUTCMonth() + 1,
-    day: jst.getUTCDate(),
-    hour: jst.getUTCHours(),
-    minute: jst.getUTCMinutes(),
+    year: readTokyoPart(parts, "year"),
+    month: readTokyoPart(parts, "month"),
+    day: readTokyoPart(parts, "day"),
+    hour: readTokyoPart(parts, "hour"),
+    minute: readTokyoPart(parts, "minute"),
   };
 }
 
@@ -79,8 +96,15 @@ export function buildIsoFromTokyoDateAndTime(dateKey: string, hhmm: string): str
   if (!dateParts || !timeParts) return null;
 
   const utcMs =
-    Date.UTC(dateParts.year, dateParts.month - 1, dateParts.day, timeParts.hours, timeParts.minutes, 0, 0) -
-    JST_OFFSET_MS;
+    Date.UTC(
+      dateParts.year,
+      dateParts.month - 1,
+      dateParts.day,
+      timeParts.hours,
+      timeParts.minutes,
+      0,
+      0,
+    ) - JST_OFFSET_MS;
   return new Date(utcMs).toISOString();
 }
 
