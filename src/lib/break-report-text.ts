@@ -2,13 +2,12 @@ import {
   BREAK_SLOT_COUNT,
   type BreakEntry,
   type StaffMember,
-  formatTimeLabel,
   getBreakDurationMinutes,
   getShortageMinutes,
   getTotalCompletedMinutes,
   parseDateKey,
 } from "@/lib/break-management";
-import { formatTokyoSentAtLabel } from "@/lib/tokyo-time";
+import { formatIsoTimeInTokyo, formatTokyoSentAtLabel } from "@/lib/tokyo-time";
 
 const SLOT_LABELS = ["①", "②", "③", "④"] as const;
 
@@ -29,8 +28,8 @@ export function formatBreakSlotForReport(entry: BreakEntry): string {
   if (hasStart && !hasEnd) return "終了未入力";
   if (!hasStart && hasEnd) return "開始未入力";
 
-  const start = formatTimeLabel(entry.startAt);
-  const end = formatTimeLabel(entry.endAt);
+  const start = formatIsoTimeInTokyo(entry.startAt);
+  const end = formatIsoTimeInTokyo(entry.endAt);
   const minutes = getBreakDurationMinutes(entry);
   if (start === "—" || end === "—" || minutes <= 0) return "未記録";
   return `${start}〜${end}（${minutes}分）`;

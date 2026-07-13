@@ -1,4 +1,4 @@
-import { formatTokyoTimeHhmm } from "@/lib/tokyo-time";
+import { formatIsoTimeInTokyo, formatTokyoTimeHhmm } from "@/lib/tokyo-time";
 
 export const BREAK_SLOT_COUNT = 4;
 export const BREAKS_STORAGE_KEY = "solfa-break-management";
@@ -79,10 +79,7 @@ export function formatBusinessDateLabel(dateKey: string): string {
 }
 
 export function formatTimeLabel(iso: string | null): string {
-  if (!iso) return "—";
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return "—";
-  return formatTokyoTimeHhmm(date);
+  return formatIsoTimeInTokyo(iso);
 }
 
 export function formatTimeInputValue(iso: string | null): string {

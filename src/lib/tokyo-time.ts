@@ -1,39 +1,43 @@
+/** Japan Standard Time (Asia/Tokyo) — fixed UTC+9, no DST. */
 export const TOKYO_TIME_ZONE = "Asia/Tokyo";
+const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
-type DatePartType = "year" | "month" | "day" | "hour" | "minute";
+type TokyoDateParts = {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+};
 
-function partValue(parts: Intl.DateTimeFormatPart[], type: DatePartType): string {
-  return parts.find((part) => part.type === type)?.value ?? "";
+function getTokyoParts(date: Date): TokyoDateParts {
+  const jst = new Date(date.getTime() + JST_OFFSET_MS);
+  return {
+    year: jst.getUTCFullYear(),
+    month: jst.getUTCMonth() + 1,
+    day: jst.getUTCDate(),
+    hour: jst.getUTCHours(),
+    minute: jst.getUTCMinutes(),
+  };
 }
 
-function formatTokyoParts(date: Date, options: Intl.DateTimeFormatOptions): Intl.DateTimeFormatPart[] {
-  return new Intl.DateTimeFormat("en-US", {
-    timeZone: TOKYO_TIME_ZONE,
-    ...options,
-  }).formatToParts(date);
+function pad2(value: number): string {
+  return String(value).padStart(2, "0");
 }
 
 export function formatTokyoTimeHhmm(date: Date): string {
-  const parts = formatTokyoParts(date, {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-  const hours = partValue(parts, "hour").padStart(2, "0");
-  const minutes = partValue(parts, "minute").padStart(2, "0");
-  return `${hours}:${minutes}`;
+  const { hour, minute } = getTokyoParts(date);
+  return `${pad2(hour)}:${pad2(minute)}`;
+}
+
+export function formatIsoTimeInTokyo(iso: string | null): string {
+  if (!iso) return "—";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "—";
+  return formatTokyoTimeHhmm(date);
 }
 
 export function formatTokyoSentAtLabel(date: Date): string {
-  const parts = formatTokyoParts(date, {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-  const hours = partValue(parts, "hour").padStart(2, "0");
-  const minutes = partValue(parts, "minute").padStart(2, "0");
-  return `${partValue(parts, "year")}年${partValue(parts, "month")}月${partValue(parts, "day")}日 ${hours}:${minutes}`;
+  const { year, month, day, hour, minute } = getTokyoParts(date);
+  return `${year}年${month}月${day}日 ${pad2(hour)}:${pad2(minute)}`;
 }
