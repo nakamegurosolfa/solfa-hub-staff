@@ -9,7 +9,7 @@ import type { CategoryItem } from "@/data/categories";
 
 export type AppSectionId = "cocktails" | "manuals" | "rules" | "organization" | "about";
 
-export type HomeCardId = "cocktails" | "manuals" | "qa" | "updates";
+export type HomeCardId = "cocktails" | "manuals" | "breaks" | "qa" | "updates";
 
 export type HomeSection = {
   id: HomeCardId;
@@ -27,6 +27,15 @@ export const EMPLOYEE_WORK_LABEL = "社員業務";
 export const APP_VERSION = "ver.1.1.0";
 
 export const APP_TAGLINE = "あなたの業務をいつでもサポートします。";
+
+export const breakHomeSection: HomeSection = {
+  id: "breaks",
+  to: "/breaks",
+  emoji: "☕",
+  title: "休憩管理",
+  description: "休憩の開始・終了を記録",
+  color: "#E8A87C",
+};
 
 export const homeSections: HomeSection[] = [
   {

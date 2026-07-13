@@ -13,6 +13,7 @@ import { Route as RulesRouteImport } from './routes/rules'
 import { Route as OrganizationRouteImport } from './routes/organization'
 import { Route as ManualsRouteImport } from './routes/manuals'
 import { Route as CocktailsRouteImport } from './routes/cocktails'
+import { Route as BreaksRouteImport } from './routes/breaks'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UpdatesIndexRouteImport } from './routes/updates.index'
@@ -27,10 +28,12 @@ import { Route as FavoritesIndexRouteImport } from './routes/favorites.index'
 import { Route as EmployeeWorkIndexRouteImport } from './routes/employee-work.index'
 import { Route as EmployeeLoginIndexRouteImport } from './routes/employee-login.index'
 import { Route as CocktailsIndexRouteImport } from './routes/cocktails.index'
+import { Route as BreaksIndexRouteImport } from './routes/breaks.index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as ManualsIdRouteImport } from './routes/manuals.$id'
 import { Route as EmployeeWorkIdRouteImport } from './routes/employee-work.$id'
 import { Route as CocktailsIdRouteImport } from './routes/cocktails.$id'
+import { Route as BreaksStaffIdRouteImport } from './routes/breaks.$staffId'
 import { Route as AboutIdRouteImport } from './routes/about.$id'
 import { Route as RulesCategoryIdRouteImport } from './routes/rules.category.$id'
 import { Route as ApiNotionImageBlockIdRouteImport } from './routes/api/notion-image.$blockId'
@@ -54,6 +57,11 @@ const ManualsRoute = ManualsRouteImport.update({
 const CocktailsRoute = CocktailsRouteImport.update({
   id: '/cocktails',
   path: '/cocktails',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BreaksRoute = BreaksRouteImport.update({
+  id: '/breaks',
+  path: '/breaks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -126,6 +134,11 @@ const CocktailsIndexRoute = CocktailsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CocktailsRoute,
 } as any)
+const BreaksIndexRoute = BreaksIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BreaksRoute,
+} as any)
 const AboutIndexRoute = AboutIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -145,6 +158,11 @@ const CocktailsIdRoute = CocktailsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => CocktailsRoute,
+} as any)
+const BreaksStaffIdRoute = BreaksStaffIdRouteImport.update({
+  id: '/$staffId',
+  path: '/$staffId',
+  getParentRoute: () => BreaksRoute,
 } as any)
 const AboutIdRoute = AboutIdRouteImport.update({
   id: '/$id',
@@ -170,15 +188,18 @@ const AboutCategoryIdRoute = AboutCategoryIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
+  '/breaks': typeof BreaksRouteWithChildren
   '/cocktails': typeof CocktailsRouteWithChildren
   '/manuals': typeof ManualsRouteWithChildren
   '/organization': typeof OrganizationRouteWithChildren
   '/rules': typeof RulesRouteWithChildren
   '/about/$id': typeof AboutIdRoute
+  '/breaks/$staffId': typeof BreaksStaffIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
   '/employee-work/$id': typeof EmployeeWorkIdRoute
   '/manuals/$id': typeof ManualsIdRoute
   '/about/': typeof AboutIndexRoute
+  '/breaks/': typeof BreaksIndexRoute
   '/cocktails/': typeof CocktailsIndexRoute
   '/employee-login/': typeof EmployeeLoginIndexRoute
   '/employee-work/': typeof EmployeeWorkIndexRoute
@@ -198,10 +219,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about/$id': typeof AboutIdRoute
+  '/breaks/$staffId': typeof BreaksStaffIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
   '/employee-work/$id': typeof EmployeeWorkIdRoute
   '/manuals/$id': typeof ManualsIdRoute
   '/about': typeof AboutIndexRoute
+  '/breaks': typeof BreaksIndexRoute
   '/cocktails': typeof CocktailsIndexRoute
   '/employee-login': typeof EmployeeLoginIndexRoute
   '/employee-work': typeof EmployeeWorkIndexRoute
@@ -222,15 +245,18 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
+  '/breaks': typeof BreaksRouteWithChildren
   '/cocktails': typeof CocktailsRouteWithChildren
   '/manuals': typeof ManualsRouteWithChildren
   '/organization': typeof OrganizationRouteWithChildren
   '/rules': typeof RulesRouteWithChildren
   '/about/$id': typeof AboutIdRoute
+  '/breaks/$staffId': typeof BreaksStaffIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
   '/employee-work/$id': typeof EmployeeWorkIdRoute
   '/manuals/$id': typeof ManualsIdRoute
   '/about/': typeof AboutIndexRoute
+  '/breaks/': typeof BreaksIndexRoute
   '/cocktails/': typeof CocktailsIndexRoute
   '/employee-login/': typeof EmployeeLoginIndexRoute
   '/employee-work/': typeof EmployeeWorkIndexRoute
@@ -252,15 +278,18 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/breaks'
     | '/cocktails'
     | '/manuals'
     | '/organization'
     | '/rules'
     | '/about/$id'
+    | '/breaks/$staffId'
     | '/cocktails/$id'
     | '/employee-work/$id'
     | '/manuals/$id'
     | '/about/'
+    | '/breaks/'
     | '/cocktails/'
     | '/employee-login/'
     | '/employee-work/'
@@ -280,10 +309,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about/$id'
+    | '/breaks/$staffId'
     | '/cocktails/$id'
     | '/employee-work/$id'
     | '/manuals/$id'
     | '/about'
+    | '/breaks'
     | '/cocktails'
     | '/employee-login'
     | '/employee-work'
@@ -303,15 +334,18 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/breaks'
     | '/cocktails'
     | '/manuals'
     | '/organization'
     | '/rules'
     | '/about/$id'
+    | '/breaks/$staffId'
     | '/cocktails/$id'
     | '/employee-work/$id'
     | '/manuals/$id'
     | '/about/'
+    | '/breaks/'
     | '/cocktails/'
     | '/employee-login/'
     | '/employee-work/'
@@ -332,6 +366,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRouteWithChildren
+  BreaksRoute: typeof BreaksRouteWithChildren
   CocktailsRoute: typeof CocktailsRouteWithChildren
   ManualsRoute: typeof ManualsRouteWithChildren
   OrganizationRoute: typeof OrganizationRouteWithChildren
@@ -376,6 +411,13 @@ declare module '@tanstack/react-router' {
       path: '/cocktails'
       fullPath: '/cocktails'
       preLoaderRoute: typeof CocktailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/breaks': {
+      id: '/breaks'
+      path: '/breaks'
+      fullPath: '/breaks'
+      preLoaderRoute: typeof BreaksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -476,6 +518,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CocktailsIndexRouteImport
       parentRoute: typeof CocktailsRoute
     }
+    '/breaks/': {
+      id: '/breaks/'
+      path: '/'
+      fullPath: '/breaks/'
+      preLoaderRoute: typeof BreaksIndexRouteImport
+      parentRoute: typeof BreaksRoute
+    }
     '/about/': {
       id: '/about/'
       path: '/'
@@ -503,6 +552,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/cocktails/$id'
       preLoaderRoute: typeof CocktailsIdRouteImport
       parentRoute: typeof CocktailsRoute
+    }
+    '/breaks/$staffId': {
+      id: '/breaks/$staffId'
+      path: '/$staffId'
+      fullPath: '/breaks/$staffId'
+      preLoaderRoute: typeof BreaksStaffIdRouteImport
+      parentRoute: typeof BreaksRoute
     }
     '/about/$id': {
       id: '/about/$id'
@@ -548,6 +604,19 @@ const AboutRouteChildren: AboutRouteChildren = {
 }
 
 const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
+
+interface BreaksRouteChildren {
+  BreaksStaffIdRoute: typeof BreaksStaffIdRoute
+  BreaksIndexRoute: typeof BreaksIndexRoute
+}
+
+const BreaksRouteChildren: BreaksRouteChildren = {
+  BreaksStaffIdRoute: BreaksStaffIdRoute,
+  BreaksIndexRoute: BreaksIndexRoute,
+}
+
+const BreaksRouteWithChildren =
+  BreaksRoute._addFileChildren(BreaksRouteChildren)
 
 interface CocktailsRouteChildren {
   CocktailsIdRoute: typeof CocktailsIdRoute
@@ -603,6 +672,7 @@ const RulesRouteWithChildren = RulesRoute._addFileChildren(RulesRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRouteWithChildren,
+  BreaksRoute: BreaksRouteWithChildren,
   CocktailsRoute: CocktailsRouteWithChildren,
   ManualsRoute: ManualsRouteWithChildren,
   OrganizationRoute: OrganizationRouteWithChildren,
