@@ -170,6 +170,10 @@ export async function sendBreakReportEmail(input: BreakReportInput): Promise<Bre
     });
 
     const responseBody = await response.text();
+    console.log("HERE", {
+      file: "src/lib/break-report.server.ts",
+      function: "sendBreakReportEmail",
+    });
     console.log("[break-report] Resend response", {
       status: response.status,
       ok: response.ok,
