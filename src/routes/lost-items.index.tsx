@@ -4,10 +4,11 @@ import { AppShell, BackLink, PageHeader } from "@/components/layout/AppShell";
 import { LostItemCard } from "@/components/ui-hub/lost-items/LostItemCard";
 import { LostItemFilterBar } from "@/components/ui-hub/lost-items/LostItemFilterBar";
 import { LostItemRegisterDialog } from "@/components/ui-hub/lost-items/LostItemRegisterDialog";
+import { appPageTitle } from "@/data/app-sections";
 import { useLostItemsList } from "@/hooks/use-lost-items";
 
 export const Route = createFileRoute("/lost-items/")({
-  head: () => ({ meta: [{ title: "忘れ物管理 — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("忘れ物管理") }] }),
   component: LostItemsIndexPage,
 });
 

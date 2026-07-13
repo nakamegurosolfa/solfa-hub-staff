@@ -5,6 +5,7 @@ import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { CocktailCard } from "@/components/ui-hub/CocktailCard";
 import { SectionLabel } from "@/components/ui-hub/ListCard";
 import { SearchBox } from "@/components/ui-hub/SearchBox";
+import { APP_NAME, appPageTitle } from "@/data/app-sections";
 import { filterCocktails } from "@/lib/cocktail-search";
 import { fetchCocktailIndex } from "@/lib/notion-functions";
 
@@ -15,7 +16,7 @@ const cocktailSearchSchema = z.object({
 export const Route = createFileRoute("/cocktails/")({
   validateSearch: cocktailSearchSchema,
   loader: () => fetchCocktailIndex(),
-  head: () => ({ meta: [{ title: "カクテルレシピ — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("カクテルレシピ") }] }),
   component: CocktailsIndex,
   errorComponent: () => (
     <AppShell>
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/cocktails/")({
       <p className="rounded-2xl border border-border bg-[var(--color-surface)] px-4 py-6 text-center text-sm leading-relaxed text-muted-foreground">
         カクテルレシピの読み込みに失敗しました。
         <br />
-        Notion の「カクテルレシピ」データベースを Integration「solfa MANUAL APP」に接続し、
+        Notion の「カクテルレシピ」データベースを Integration「{APP_NAME}」に接続し、
         <code className="text-foreground/80">NOTION_COCKTAIL_DATABASE_ID</code> が正しいか確認してください。
       </p>
     </AppShell>

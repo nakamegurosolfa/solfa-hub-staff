@@ -2,6 +2,7 @@ import { createFileRoute, redirect, useNavigate, useRouter } from "@tanstack/rea
 import { z } from "zod";
 
 import { PasswordGateScreen } from "@/components/auth/PasswordGateScreen";
+import { appPageTitle } from "@/data/app-sections";
 import { fetchAuthStatus, loginEmployee } from "@/lib/auth-functions";
 
 const employeeLoginSearchSchema = z.object({
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/employee-login/")({
       throw redirect({ to: search.redirect ?? "/" });
     }
   },
-  head: () => ({ meta: [{ title: "社員認証 — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("社員認証") }] }),
   component: EmployeeLoginPage,
 });
 

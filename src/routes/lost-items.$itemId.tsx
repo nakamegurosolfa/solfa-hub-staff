@@ -24,11 +24,12 @@ import {
 } from "@/components/ui-hub/lost-items/LostItemFormFields";
 import { type CompressedLostItemPhoto } from "@/lib/lost-items-image";
 import { canDeleteLostItem, formatStorageDeadlineLabel } from "@/lib/lost-items-storage";
+import { appPageTitle } from "@/data/app-sections";
 import { lostItemToFormState, useLostItemDetail } from "@/hooks/use-lost-items";
 import { formatTokyoBusinessDateShortLabel } from "@/lib/tokyo-time";
 
 export const Route = createFileRoute("/lost-items/$itemId")({
-  head: () => ({ meta: [{ title: "忘れ物詳細 — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("忘れ物詳細") }] }),
   component: LostItemDetailPage,
 });
 

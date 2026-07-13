@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, BackLink, PageHeader } from "@/components/layout/AppShell";
 import { QaList } from "@/components/ui-hub/QaList";
+import { appPageTitle } from "@/data/app-sections";
 import { fetchQaIndex } from "@/lib/notion-functions";
 import { groupQaByCategory } from "@/lib/qa-groups";
 
 export const Route = createFileRoute("/qa/")({
   loader: () => fetchQaIndex(),
-  head: () => ({ meta: [{ title: "Q&A — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("Q&A") }] }),
   component: QaPage,
   errorComponent: () => (
     <AppShell>

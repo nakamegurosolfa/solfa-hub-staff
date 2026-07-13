@@ -2,7 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AppShell, BackLink } from "@/components/layout/AppShell";
 import { DetailPageHeader } from "@/components/ui-hub/DetailPageHeader";
 import { NotionContent } from "@/components/ui-hub/NotionContent";
-import { sectionLabels } from "@/data/app-sections";
+import { appPageTitle, sectionLabels } from "@/data/app-sections";
 import { requiresEmployeeAuth } from "@/lib/employee-access";
 import { fetchManualPage, fetchPageAccessMetadata } from "@/lib/notion-functions";
 import { redirectToEmployeeLoginIfNeeded } from "@/lib/employee-route";
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/manuals/$id")({
     return { manual };
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: loaderData ? `${loaderData.manual.title} — 業務マニュアル` : "業務マニュアル" }],
+    meta: [{ title: loaderData ? appPageTitle(`${loaderData.manual.title} — 業務マニュアル`) : appPageTitle("業務マニュアル") }],
   }),
   component: ManualDetail,
   notFoundComponent: () => (

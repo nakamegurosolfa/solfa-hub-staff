@@ -35,7 +35,7 @@ export const Route = createFileRoute("/employee-work/$id")({
     }
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: loaderData ? `${loaderData.page.title} — ${EMPLOYEE_WORK_LABEL}` : EMPLOYEE_WORK_LABEL }],
+    meta: [{ title: loaderData ? appPageTitle(`${loaderData.page.title} — ${EMPLOYEE_WORK_LABEL}`) : appPageTitle(EMPLOYEE_WORK_LABEL) }],
   }),
   component: EmployeeWorkDetail,
   notFoundComponent: () => (

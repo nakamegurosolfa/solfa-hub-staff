@@ -2,7 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AppShell, BackLink } from "@/components/layout/AppShell";
 import { DetailPageHeader } from "@/components/ui-hub/DetailPageHeader";
 import { NotionContent } from "@/components/ui-hub/NotionContent";
-import { sectionLabels } from "@/data/app-sections";
+import { appPageTitle, sectionLabels } from "@/data/app-sections";
 import { fetchAboutIndex, fetchManualPage } from "@/lib/notion-functions";
 import { redirectToEmployeeLoginIfNeeded } from "@/lib/employee-route";
 import { sameNotionId } from "@/lib/notion";
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/about/$id")({
     return { page };
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: loaderData ? `${loaderData.page.title} — solfaとは` : "solfaとは" }],
+    meta: [{ title: loaderData ? appPageTitle(`${loaderData.page.title} — solfaとは`) : appPageTitle("solfaとは") }],
   }),
   component: AboutDetail,
   notFoundComponent: () => (

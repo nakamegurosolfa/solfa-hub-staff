@@ -5,7 +5,7 @@ import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { BreakHomeCard } from "@/components/ui-hub/breaks/BreakHomeCard";
 import { LostItemHomeCard } from "@/components/ui-hub/lost-items/LostItemHomeCard";
 import { EmployeeWorkHomeCard } from "@/components/ui-hub/EmployeeWorkHomeCard";
-import { APP_TAGLINE, APP_VERSION, homeSections } from "@/data/app-sections";
+import { APP_NAME, APP_TAGLINE, APP_VERSION, homeSections } from "@/data/app-sections";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <AppShell>
-      <PageHeader title="solfa MANUAL APP" version={APP_VERSION} subtitle={APP_TAGLINE} />
+      <PageHeader title={APP_NAME} version={APP_VERSION} subtitle={APP_TAGLINE} />
 
       <div className="flex flex-col gap-3">
         {homeSections.map((section) => (

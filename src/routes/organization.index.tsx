@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, BackLink } from "@/components/layout/AppShell";
 import { DetailPageHeader } from "@/components/ui-hub/DetailPageHeader";
 import { NotionContent } from "@/components/ui-hub/NotionContent";
-import { sectionLabels } from "@/data/app-sections";
+import { appPageTitle, sectionLabels } from "@/data/app-sections";
 import { fetchOrganizationAccessMetadata, fetchOrganizationPage } from "@/lib/notion-functions";
 import { redirectToEmployeeLoginIfNeeded } from "@/lib/employee-route";
 import { makePageId } from "@/lib/page-library";
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/organization/")({
     return fetchOrganizationPage();
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: loaderData ? `${loaderData.title} — 会社組織図` : "会社組織図 — solfa MANUAL APP" }],
+    meta: [{ title: loaderData ? appPageTitle(`${loaderData.title} — 会社組織図`) : appPageTitle("会社組織図") }],
   }),
   component: OrganizationPage,
   errorComponent: () => (

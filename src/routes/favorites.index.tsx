@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Star } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
+import { appPageTitle } from "@/data/app-sections";
 import { SavedPageList } from "@/components/ui-hub/SavedPageList";
 import { useFavoritePages } from "@/hooks/use-page-library";
 
 export const Route = createFileRoute("/favorites/")({
-  head: () => ({ meta: [{ title: "お気に入り — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("お気に入り") }] }),
   component: FavoritesPage,
 });
 

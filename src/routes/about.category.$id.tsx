@@ -14,7 +14,7 @@ export const Route = createFileRoute("/about/category/$id")({
     return { category };
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: loaderData ? `${loaderData.category.title} — solfaとは` : "solfaとは" }],
+    meta: [{ title: loaderData ? appPageTitle(`${loaderData.category.title} — solfaとは`) : appPageTitle("solfaとは") }],
   }),
   component: AboutCategoryDetail,
 });

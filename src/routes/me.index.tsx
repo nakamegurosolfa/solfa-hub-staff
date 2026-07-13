@@ -1,9 +1,10 @@
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { logout } from "@/lib/auth-functions";
+import { APP_NAME, APP_VERSION, appPageTitle } from "@/data/app-sections";
 
 export const Route = createFileRoute("/me/")({
-  head: () => ({ meta: [{ title: "マイページ — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("マイページ") }] }),
   component: MyPage,
 });
 
@@ -38,10 +39,12 @@ function MyPage() {
       <section className="card-surface mt-4 p-5">
         <h2 className="text-lg font-semibold tracking-tight">アプリについて</h2>
         <p className="mt-3 text-[15px] leading-relaxed text-foreground/90">
-          solfa MANUAL APP は、solfa 専用のアルバイトスタッフ向け業務マニュアルアプリです。Notion
+          {APP_NAME} は、solfa 専用のアルバイトスタッフ向け業務マニュアルアプリです。Notion
           で管理された情報を、営業中にすぐ確認できる形で提供します。
         </p>
-        <p className="mt-3 text-sm text-muted-foreground">solfa MANUAL APP</p>
+        <p className="mt-3 text-sm text-muted-foreground">
+          {APP_NAME} {APP_VERSION}
+        </p>
       </section>
     </AppShell>
   );

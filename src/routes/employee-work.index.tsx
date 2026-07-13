@@ -12,7 +12,7 @@ export const Route = createFileRoute("/employee-work/")({
     redirectToEmployeeLoginIfNeeded(context.auth, true, EMPLOYEE_WORK_PATH);
   },
   loader: () => fetchEmployeeWorkIndex(),
-  head: () => ({ meta: [{ title: `${EMPLOYEE_WORK_LABEL} — solfa MANUAL APP` }] }),
+  head: () => ({ meta: [{ title: appPageTitle(EMPLOYEE_WORK_LABEL) }] }),
   component: EmployeeWorkIndex,
   errorComponent: () => (
     <AppShell>

@@ -5,6 +5,7 @@ import { ManualCard } from "@/components/ui-hub/ManualCard";
 import { ManualSearchResultCard } from "@/components/ui-hub/ManualSearchResultCard";
 import { SectionLabel } from "@/components/ui-hub/ListCard";
 import { SearchBox } from "@/components/ui-hub/SearchBox";
+import { appPageTitle } from "@/data/app-sections";
 import { fetchManualIndex } from "@/lib/notion-functions";
 import { groupManualsByCategory } from "@/lib/manual-groups";
 import type { ManualSummary } from "@/lib/notion-types";
@@ -14,7 +15,7 @@ const HIGHLIGHT_DURATION_MS = 2000;
 
 export const Route = createFileRoute("/manuals/")({
   loader: () => fetchManualIndex(),
-  head: () => ({ meta: [{ title: "業務マニュアル — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("業務マニュアル") }] }),
   component: ManualsIndex,
   errorComponent: () => (
     <AppShell>

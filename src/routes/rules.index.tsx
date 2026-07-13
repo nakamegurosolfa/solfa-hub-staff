@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { CategoryCard } from "@/components/ui-hub/CategoryCard";
-import { shopRulesCategories } from "@/data/app-sections";
+import { appPageTitle, shopRulesCategories } from "@/data/app-sections";
 
 export const Route = createFileRoute("/rules/")({
   component: RulesIndex,
-  head: () => ({ meta: [{ title: "店のルール — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("店のルール") }] }),
 });
 
 function RulesIndex() {

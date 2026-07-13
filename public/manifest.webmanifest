@@ -1,6 +1,6 @@
 {
-  "name": "solfa MANUAL APP",
-  "short_name": "solfa MANUAL",
+  "name": "solfa STAFF APP",
+  "short_name": "solfa STAFF",
   "description": "Internal staff hub for solfa — Tokyo nightclub & live venue.",
   "start_url": "/",
   "scope": "/",

@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { BreakSlotRow } from "@/components/ui-hub/breaks/BreakSlotRow";
 import { useBreakStaffDetail } from "@/hooks/use-break-management";
+import { appPageTitle } from "@/data/app-sections";
 import {
   formatMinutesLabel,
   getShortageMinutes,
@@ -28,7 +29,7 @@ const breakDetailSearchSchema = z.object({
 
 export const Route = createFileRoute("/breaks/$staffId")({
   validateSearch: breakDetailSearchSchema,
-  head: () => ({ meta: [{ title: "スタッフ詳細 — 休憩管理" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("スタッフ詳細 — 休憩管理") }] }),
   component: BreakStaffDetailPage,
 });
 

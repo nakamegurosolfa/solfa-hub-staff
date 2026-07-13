@@ -21,7 +21,7 @@ const breakSearchSchema = z.object({
 
 export const Route = createFileRoute("/breaks/")({
   validateSearch: breakSearchSchema,
-  head: () => ({ meta: [{ title: "休憩管理 — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("休憩管理") }] }),
   component: BreaksIndexPage,
 });
 

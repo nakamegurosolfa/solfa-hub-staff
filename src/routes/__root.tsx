@@ -11,6 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { APP_NAME, APP_SHORT_NAME } from "@/data/app-sections";
 import { fetchAuthStatus } from "@/lib/auth-functions";
 import type { AuthStatus } from "@/lib/auth.server";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -104,10 +105,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { name: "theme-color", content: "#111111" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { name: "apple-mobile-web-app-title", content: "solfa HUB" },
-      { title: "solfa HUB — Staff app" },
+      { name: "apple-mobile-web-app-title", content: APP_SHORT_NAME },
+      { title: APP_NAME },
       { name: "description", content: "Internal staff hub for solfa, a nightclub and live music venue in Tokyo." },
-      { property: "og:title", content: "solfa HUB" },
+      { property: "og:title", content: APP_NAME },
       { property: "og:description", content: "Internal staff hub for solfa, a nightclub and live music venue in Tokyo." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -3,7 +3,7 @@ import { AppShell, BackLink } from "@/components/layout/AppShell";
 import { CocktailRecipeSections } from "@/components/ui-hub/CocktailRecipeSections";
 import { CocktailValueBadge } from "@/components/ui-hub/CocktailMetaBadges";
 import { DetailPageHeader } from "@/components/ui-hub/DetailPageHeader";
-import { sectionLabels } from "@/data/app-sections";
+import { appPageTitle, sectionLabels } from "@/data/app-sections";
 import { formatDifficulty } from "@/lib/cocktail-difficulty";
 import { fetchCocktailIndex, fetchCocktailPage } from "@/lib/notion-functions";
 import { redirectToEmployeeLoginIfNeeded } from "@/lib/employee-route";
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/cocktails/$id")({
     return { cocktail };
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: loaderData ? `${loaderData.cocktail.name} — カクテルレシピ` : "カクテルレシピ" }],
+    meta: [{ title: loaderData ? appPageTitle(`${loaderData.cocktail.name} — カクテルレシピ`) : appPageTitle("カクテルレシピ") }],
   }),
   component: CocktailDetail,
   notFoundComponent: () => (

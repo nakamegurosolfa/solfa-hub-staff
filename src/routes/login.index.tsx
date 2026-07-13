@@ -2,6 +2,7 @@ import { createFileRoute, redirect, useNavigate, useRouter } from "@tanstack/rea
 import { z } from "zod";
 
 import { PasswordGateScreen } from "@/components/auth/PasswordGateScreen";
+import { APP_NAME, appPageTitle } from "@/data/app-sections";
 import { fetchAuthStatus, loginApp } from "@/lib/auth-functions";
 
 const loginSearchSchema = z.object({
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/login/")({
       throw redirect({ to: "/" });
     }
   },
-  head: () => ({ meta: [{ title: "ログイン — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("ログイン") }] }),
   component: LoginPage,
 });
 
@@ -28,7 +29,7 @@ function LoginPage() {
   return (
     <PasswordGateScreen
       title="アプリ認証"
-      description="solfa MANUAL APP を閲覧するには共通パスワードを入力してください。"
+      description={`${APP_NAME} を閲覧するには共通パスワードを入力してください。`}
       submitLabel="ログイン"
       onSubmit={async (password) => {
         const result = await loginApp({ data: { password } });

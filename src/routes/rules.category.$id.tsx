@@ -14,7 +14,7 @@ export const Route = createFileRoute("/rules/category/$id")({
     return { category };
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: loaderData ? `${loaderData.category.title} — 店のルール` : "店のルール" }],
+    meta: [{ title: loaderData ? appPageTitle(`${loaderData.category.title} — 店のルール`) : appPageTitle("店のルール") }],
   }),
   component: RulesCategoryDetail,
 });

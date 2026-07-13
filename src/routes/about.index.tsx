@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { CategoryCard } from "@/components/ui-hub/CategoryCard";
-import { aboutCategories } from "@/data/app-sections";
+import { aboutCategories, appPageTitle } from "@/data/app-sections";
 import { fetchAboutIndex } from "@/lib/notion-functions";
 
 export const Route = createFileRoute("/about/")({
   loader: () => fetchAboutIndex(),
-  head: () => ({ meta: [{ title: "solfaとは — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("solfaとは") }] }),
   component: AboutIndex,
 });
 

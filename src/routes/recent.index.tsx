@@ -4,7 +4,7 @@ import { SavedPageList } from "@/components/ui-hub/SavedPageList";
 import { useRecentPages } from "@/hooks/use-page-library";
 
 export const Route = createFileRoute("/recent/")({
-  head: () => ({ meta: [{ title: "最近 — solfa MANUAL APP" }] }),
+  head: () => ({ meta: [{ title: appPageTitle("最近") }] }),
   component: RecentPage,
 });
 

@@ -1,5 +1,5 @@
 /**
- * solfa MANUAL APP — product structure
+ * solfa STAFF APP — product structure
  *
  * Goal: staff reach the right info in 3 taps or fewer during service.
  * Prioritize simplicity over information volume.
@@ -24,9 +24,15 @@ export const EMPLOYEE_WORK_PATH = "/employee-work";
 
 export const EMPLOYEE_WORK_LABEL = "社員業務";
 
-export const APP_VERSION = "ver.1.1.0";
+export const APP_NAME = "solfa STAFF APP";
+export const APP_SHORT_NAME = "solfa STAFF";
+export const APP_VERSION = "ver.1.2.0";
 
 export const APP_TAGLINE = "あなたの業務をいつでもサポートします。";
+
+export function appPageTitle(pageTitle: string): string {
+  return `${pageTitle} — ${APP_NAME}`;
+}
 
 export const lostItemHomeSection: HomeSection = {
   id: "lost-items",
