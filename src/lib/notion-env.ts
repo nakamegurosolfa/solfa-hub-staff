@@ -16,6 +16,9 @@ const ENV_KEYS = [
   "SESSION_SECRET",
   "APP_AUTH_VERSION",
   "EMPLOYEE_AUTH_VERSION",
+  "RESEND_API_KEY",
+  "RESEND_FROM",
+  "BREAK_REPORT_TO",
 ] as const;
 
 function parseDotenvLine(line: string) {
@@ -43,20 +46,22 @@ function readLocalDotenvFile(): RuntimeEnv {
     return {};
   }
 
-  try {
-    const envPath = join(process.cwd(), ".env");
-    const parsed: RuntimeEnv = {};
+  const parsed: RuntimeEnv = {};
 
-    for (const line of readFileSync(envPath, "utf8").split("\n")) {
-      const entry = parseDotenvLine(line);
-      if (!entry || !ENV_KEYS.includes(entry.key as (typeof ENV_KEYS)[number])) continue;
-      parsed[entry.key] = entry.value;
+  for (const filename of [".env", ".env.local"]) {
+    try {
+      const envPath = join(process.cwd(), filename);
+      for (const line of readFileSync(envPath, "utf8").split("\n")) {
+        const entry = parseDotenvLine(line);
+        if (!entry || !ENV_KEYS.includes(entry.key as (typeof ENV_KEYS)[number])) continue;
+        parsed[entry.key] = entry.value;
+      }
+    } catch {
+      // file may not exist
     }
-
-    return parsed;
-  } catch {
-    return {};
   }
+
+  return parsed;
 }
 
 export function setNotionRuntimeEnv(env: unknown) {

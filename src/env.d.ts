@@ -20,6 +20,9 @@ declare namespace NodeJS {
     SESSION_SECRET?: string;
     APP_AUTH_VERSION?: string;
     EMPLOYEE_AUTH_VERSION?: string;
+    RESEND_API_KEY?: string;
+    RESEND_FROM?: string;
+    BREAK_REPORT_TO?: string;
   }
 }
 

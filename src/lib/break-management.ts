@@ -252,3 +252,27 @@ export function updateBreakEndTime(
     return { ...member, breaks };
   });
 }
+
+export function deleteBusinessDay(businessDate: string) {
+  const data = readStorage();
+  if (!(businessDate in data)) return;
+  delete data[businessDate];
+  writeStorage(data);
+}
+
+export type BreakReportStaffPayload = {
+  name: string;
+  requiredMinutes: RequiredBreakMinutes;
+  breaks: BreakEntry[];
+};
+
+export function toBreakReportPayload(staff: StaffMember[]): BreakReportStaffPayload[] {
+  return staff.map((member) => ({
+    name: member.name,
+    requiredMinutes: member.requiredMinutes,
+    breaks: member.breaks.map((entry) => ({
+      startAt: entry.startAt,
+      endAt: entry.endAt,
+    })),
+  }));
+}
