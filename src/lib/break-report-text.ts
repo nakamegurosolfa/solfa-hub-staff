@@ -5,15 +5,17 @@ import {
   getBreakDurationMinutes,
   getShortageMinutes,
   getTotalCompletedMinutes,
-  parseDateKey,
 } from "@/lib/break-management";
-import { formatIsoTimeInTokyo, formatTokyoSentAtLabel } from "@/lib/tokyo-time";
+import {
+  formatIsoTimeInTokyo,
+  formatTokyoBusinessDateShortLabel,
+  formatTokyoSentAtLabel,
+} from "@/lib/tokyo-time";
 
 const SLOT_LABELS = ["①", "②", "③", "④"] as const;
 
 export function formatBusinessDateShortLabel(dateKey: string): string {
-  const date = parseDateKey(dateKey);
-  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+  return formatTokyoBusinessDateShortLabel(dateKey);
 }
 
 export function formatSentAtLabel(date: Date): string {
@@ -57,7 +59,7 @@ function formatStaffSection(staff: StaffMember): string {
   return lines.join("\n");
 }
 
-export const BREAK_REPORT_FORMAT_VERSION = "jst-v2-utc-offset";
+export const BREAK_REPORT_FORMAT_VERSION = "jst-v3-tokyo-storage";
 
 export function buildBreakReportEmailSubject(businessDate: string): string {
   return `【solfa 休憩管理】${formatBusinessDateShortLabel(businessDate)}営業分`;

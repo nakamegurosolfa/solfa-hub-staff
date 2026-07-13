@@ -1,4 +1,12 @@
-import { formatIsoTimeInTokyo, formatTokyoTimeHhmm } from "@/lib/tokyo-time";
+import {
+  buildEndIsoFromTokyo,
+  buildIsoFromTokyoDateAndTime,
+  formatIsoTimeInTokyo,
+  formatIsoTimeInputInTokyo,
+  formatTokyoBusinessDateLabel,
+  formatTokyoDateKey,
+  shiftTokyoDateKey,
+} from "@/lib/tokyo-time";
 
 export const BREAK_SLOT_COUNT = 4;
 export const BREAKS_STORAGE_KEY = "solfa-break-management";
@@ -49,33 +57,16 @@ export function createEmptyBreaks(): BreakEntry[] {
   }));
 }
 
-export function formatDateKey(date: Date): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
-}
-
-export function parseDateKey(dateKey: string): Date {
-  const [y, m, d] = dateKey.split("-").map(Number);
-  return new Date(y, m - 1, d);
-}
-
 export function todayBusinessDate(): string {
-  return formatDateKey(new Date());
+  return formatTokyoDateKey(new Date());
 }
 
 export function shiftBusinessDate(dateKey: string, days: number): string {
-  const date = parseDateKey(dateKey);
-  date.setDate(date.getDate() + days);
-  return formatDateKey(date);
+  return shiftTokyoDateKey(dateKey, days);
 }
 
-const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"] as const;
-
 export function formatBusinessDateLabel(dateKey: string): string {
-  const date = parseDateKey(dateKey);
-  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日（${WEEKDAYS[date.getDay()]}）`;
+  return formatTokyoBusinessDateLabel(dateKey);
 }
 
 export function formatTimeLabel(iso: string | null): string {
@@ -83,38 +74,7 @@ export function formatTimeLabel(iso: string | null): string {
 }
 
 export function formatTimeInputValue(iso: string | null): string {
-  if (!iso) return "";
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return "";
-  return formatTokyoTimeHhmm(date);
-}
-
-export function buildIsoFromDateAndTime(dateKey: string, hhmm: string): string | null {
-  const match = /^(\d{1,2}):(\d{2})$/.exec(hhmm.trim());
-  if (!match) return null;
-  const hours = Number(match[1]);
-  const minutes = Number(match[2]);
-  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
-  const base = parseDateKey(dateKey);
-  base.setHours(hours, minutes, 0, 0);
-  return base.toISOString();
-}
-
-export function buildEndIso(startIso: string, endHhmm: string): string | null {
-  const start = new Date(startIso);
-  if (Number.isNaN(start.getTime())) return null;
-  const match = /^(\d{1,2}):(\d{2})$/.exec(endHhmm.trim());
-  if (!match) return null;
-  const hours = Number(match[1]);
-  const minutes = Number(match[2]);
-  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
-
-  const end = new Date(start);
-  end.setHours(hours, minutes, 0, 0);
-  if (end.getTime() <= start.getTime()) {
-    end.setDate(end.getDate() + 1);
-  }
-  return end.toISOString();
+  return formatIsoTimeInputInTokyo(iso);
 }
 
 export function getBreakDurationMinutes(entry: BreakEntry): number {
@@ -216,14 +176,14 @@ export function updateBreakStartTime(
   breakIndex: number,
   hhmm: string,
 ) {
-  const iso = buildIsoFromDateAndTime(businessDate, hhmm);
+  const iso = buildIsoFromTokyoDateAndTime(businessDate, hhmm);
   if (!iso) return;
   updateStaffMember(businessDate, staffId, (member) => {
     const breaks = [...member.breaks];
     const current = breaks[breakIndex];
     let endAt = current.endAt;
     if (endAt) {
-      const rebuiltEnd = buildEndIso(iso, formatTimeInputValue(endAt));
+      const rebuiltEnd = buildEndIsoFromTokyo(iso, formatTimeInputValue(endAt));
       endAt = rebuiltEnd;
     }
     breaks[breakIndex] = { startAt: iso, endAt };
@@ -241,7 +201,7 @@ export function updateBreakEndTime(
     const breaks = [...member.breaks];
     const current = breaks[breakIndex];
     if (!current?.startAt) return member;
-    const endIso = buildEndIso(current.startAt, hhmm);
+    const endIso = buildEndIsoFromTokyo(current.startAt, hhmm);
     if (!endIso) return member;
     breaks[breakIndex] = { ...current, endAt: endIso };
     return { ...member, breaks };
