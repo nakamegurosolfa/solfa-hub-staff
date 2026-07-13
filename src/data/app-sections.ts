@@ -9,7 +9,7 @@ import type { CategoryItem } from "@/data/categories";
 
 export type AppSectionId = "cocktails" | "manuals" | "rules" | "organization" | "about";
 
-export type HomeCardId = "cocktails" | "manuals" | "breaks" | "qa" | "updates";
+export type HomeCardId = "cocktails" | "manuals" | "breaks" | "lost-items" | "qa" | "updates";
 
 export type HomeSection = {
   id: HomeCardId;
@@ -27,6 +27,15 @@ export const EMPLOYEE_WORK_LABEL = "社員業務";
 export const APP_VERSION = "ver.1.1.0";
 
 export const APP_TAGLINE = "あなたの業務をいつでもサポートします。";
+
+export const lostItemHomeSection: HomeSection = {
+  id: "lost-items",
+  to: "/lost-items",
+  emoji: "👜",
+  title: "忘れ物管理",
+  description: "忘れ物の登録・返却・処分を管理",
+  color: "#D4A574",
+};
 
 export const breakHomeSection: HomeSection = {
   id: "breaks",

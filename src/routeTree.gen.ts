@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RulesRouteImport } from './routes/rules'
 import { Route as OrganizationRouteImport } from './routes/organization'
 import { Route as ManualsRouteImport } from './routes/manuals'
+import { Route as LostItemsRouteImport } from './routes/lost-items'
 import { Route as CocktailsRouteImport } from './routes/cocktails'
 import { Route as BreaksRouteImport } from './routes/breaks'
 import { Route as AboutRouteImport } from './routes/about'
@@ -23,6 +24,7 @@ import { Route as QaIndexRouteImport } from './routes/qa.index'
 import { Route as OrganizationIndexRouteImport } from './routes/organization.index'
 import { Route as MeIndexRouteImport } from './routes/me.index'
 import { Route as ManualsIndexRouteImport } from './routes/manuals.index'
+import { Route as LostItemsIndexRouteImport } from './routes/lost-items.index'
 import { Route as LoginIndexRouteImport } from './routes/login.index'
 import { Route as FavoritesIndexRouteImport } from './routes/favorites.index'
 import { Route as EmployeeWorkIndexRouteImport } from './routes/employee-work.index'
@@ -31,6 +33,7 @@ import { Route as CocktailsIndexRouteImport } from './routes/cocktails.index'
 import { Route as BreaksIndexRouteImport } from './routes/breaks.index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as ManualsIdRouteImport } from './routes/manuals.$id'
+import { Route as LostItemsItemIdRouteImport } from './routes/lost-items.$itemId'
 import { Route as EmployeeWorkIdRouteImport } from './routes/employee-work.$id'
 import { Route as CocktailsIdRouteImport } from './routes/cocktails.$id'
 import { Route as BreaksStaffIdRouteImport } from './routes/breaks.$staffId'
@@ -52,6 +55,11 @@ const OrganizationRoute = OrganizationRouteImport.update({
 const ManualsRoute = ManualsRouteImport.update({
   id: '/manuals',
   path: '/manuals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LostItemsRoute = LostItemsRouteImport.update({
+  id: '/lost-items',
+  path: '/lost-items',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CocktailsRoute = CocktailsRouteImport.update({
@@ -109,6 +117,11 @@ const ManualsIndexRoute = ManualsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ManualsRoute,
 } as any)
+const LostItemsIndexRoute = LostItemsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LostItemsRoute,
+} as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
   id: '/login/',
   path: '/login/',
@@ -148,6 +161,11 @@ const ManualsIdRoute = ManualsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => ManualsRoute,
+} as any)
+const LostItemsItemIdRoute = LostItemsItemIdRouteImport.update({
+  id: '/$itemId',
+  path: '/$itemId',
+  getParentRoute: () => LostItemsRoute,
 } as any)
 const EmployeeWorkIdRoute = EmployeeWorkIdRouteImport.update({
   id: '/employee-work/$id',
@@ -190,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRouteWithChildren
   '/breaks': typeof BreaksRouteWithChildren
   '/cocktails': typeof CocktailsRouteWithChildren
+  '/lost-items': typeof LostItemsRouteWithChildren
   '/manuals': typeof ManualsRouteWithChildren
   '/organization': typeof OrganizationRouteWithChildren
   '/rules': typeof RulesRouteWithChildren
@@ -197,6 +216,7 @@ export interface FileRoutesByFullPath {
   '/breaks/$staffId': typeof BreaksStaffIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
   '/employee-work/$id': typeof EmployeeWorkIdRoute
+  '/lost-items/$itemId': typeof LostItemsItemIdRoute
   '/manuals/$id': typeof ManualsIdRoute
   '/about/': typeof AboutIndexRoute
   '/breaks/': typeof BreaksIndexRoute
@@ -205,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/employee-work/': typeof EmployeeWorkIndexRoute
   '/favorites/': typeof FavoritesIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/lost-items/': typeof LostItemsIndexRoute
   '/manuals/': typeof ManualsIndexRoute
   '/me/': typeof MeIndexRoute
   '/organization/': typeof OrganizationIndexRoute
@@ -222,6 +243,7 @@ export interface FileRoutesByTo {
   '/breaks/$staffId': typeof BreaksStaffIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
   '/employee-work/$id': typeof EmployeeWorkIdRoute
+  '/lost-items/$itemId': typeof LostItemsItemIdRoute
   '/manuals/$id': typeof ManualsIdRoute
   '/about': typeof AboutIndexRoute
   '/breaks': typeof BreaksIndexRoute
@@ -230,6 +252,7 @@ export interface FileRoutesByTo {
   '/employee-work': typeof EmployeeWorkIndexRoute
   '/favorites': typeof FavoritesIndexRoute
   '/login': typeof LoginIndexRoute
+  '/lost-items': typeof LostItemsIndexRoute
   '/manuals': typeof ManualsIndexRoute
   '/me': typeof MeIndexRoute
   '/organization': typeof OrganizationIndexRoute
@@ -247,6 +270,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRouteWithChildren
   '/breaks': typeof BreaksRouteWithChildren
   '/cocktails': typeof CocktailsRouteWithChildren
+  '/lost-items': typeof LostItemsRouteWithChildren
   '/manuals': typeof ManualsRouteWithChildren
   '/organization': typeof OrganizationRouteWithChildren
   '/rules': typeof RulesRouteWithChildren
@@ -254,6 +278,7 @@ export interface FileRoutesById {
   '/breaks/$staffId': typeof BreaksStaffIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
   '/employee-work/$id': typeof EmployeeWorkIdRoute
+  '/lost-items/$itemId': typeof LostItemsItemIdRoute
   '/manuals/$id': typeof ManualsIdRoute
   '/about/': typeof AboutIndexRoute
   '/breaks/': typeof BreaksIndexRoute
@@ -262,6 +287,7 @@ export interface FileRoutesById {
   '/employee-work/': typeof EmployeeWorkIndexRoute
   '/favorites/': typeof FavoritesIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/lost-items/': typeof LostItemsIndexRoute
   '/manuals/': typeof ManualsIndexRoute
   '/me/': typeof MeIndexRoute
   '/organization/': typeof OrganizationIndexRoute
@@ -280,6 +306,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/breaks'
     | '/cocktails'
+    | '/lost-items'
     | '/manuals'
     | '/organization'
     | '/rules'
@@ -287,6 +314,7 @@ export interface FileRouteTypes {
     | '/breaks/$staffId'
     | '/cocktails/$id'
     | '/employee-work/$id'
+    | '/lost-items/$itemId'
     | '/manuals/$id'
     | '/about/'
     | '/breaks/'
@@ -295,6 +323,7 @@ export interface FileRouteTypes {
     | '/employee-work/'
     | '/favorites/'
     | '/login/'
+    | '/lost-items/'
     | '/manuals/'
     | '/me/'
     | '/organization/'
@@ -312,6 +341,7 @@ export interface FileRouteTypes {
     | '/breaks/$staffId'
     | '/cocktails/$id'
     | '/employee-work/$id'
+    | '/lost-items/$itemId'
     | '/manuals/$id'
     | '/about'
     | '/breaks'
@@ -320,6 +350,7 @@ export interface FileRouteTypes {
     | '/employee-work'
     | '/favorites'
     | '/login'
+    | '/lost-items'
     | '/manuals'
     | '/me'
     | '/organization'
@@ -336,6 +367,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/breaks'
     | '/cocktails'
+    | '/lost-items'
     | '/manuals'
     | '/organization'
     | '/rules'
@@ -343,6 +375,7 @@ export interface FileRouteTypes {
     | '/breaks/$staffId'
     | '/cocktails/$id'
     | '/employee-work/$id'
+    | '/lost-items/$itemId'
     | '/manuals/$id'
     | '/about/'
     | '/breaks/'
@@ -351,6 +384,7 @@ export interface FileRouteTypes {
     | '/employee-work/'
     | '/favorites/'
     | '/login/'
+    | '/lost-items/'
     | '/manuals/'
     | '/me/'
     | '/organization/'
@@ -368,6 +402,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRouteWithChildren
   BreaksRoute: typeof BreaksRouteWithChildren
   CocktailsRoute: typeof CocktailsRouteWithChildren
+  LostItemsRoute: typeof LostItemsRouteWithChildren
   ManualsRoute: typeof ManualsRouteWithChildren
   OrganizationRoute: typeof OrganizationRouteWithChildren
   RulesRoute: typeof RulesRouteWithChildren
@@ -404,6 +439,13 @@ declare module '@tanstack/react-router' {
       path: '/manuals'
       fullPath: '/manuals'
       preLoaderRoute: typeof ManualsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lost-items': {
+      id: '/lost-items'
+      path: '/lost-items'
+      fullPath: '/lost-items'
+      preLoaderRoute: typeof LostItemsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cocktails': {
@@ -483,6 +525,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManualsIndexRouteImport
       parentRoute: typeof ManualsRoute
     }
+    '/lost-items/': {
+      id: '/lost-items/'
+      path: '/'
+      fullPath: '/lost-items/'
+      preLoaderRoute: typeof LostItemsIndexRouteImport
+      parentRoute: typeof LostItemsRoute
+    }
     '/login/': {
       id: '/login/'
       path: '/login'
@@ -538,6 +587,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/manuals/$id'
       preLoaderRoute: typeof ManualsIdRouteImport
       parentRoute: typeof ManualsRoute
+    }
+    '/lost-items/$itemId': {
+      id: '/lost-items/$itemId'
+      path: '/$itemId'
+      fullPath: '/lost-items/$itemId'
+      preLoaderRoute: typeof LostItemsItemIdRouteImport
+      parentRoute: typeof LostItemsRoute
     }
     '/employee-work/$id': {
       id: '/employee-work/$id'
@@ -632,6 +688,20 @@ const CocktailsRouteWithChildren = CocktailsRoute._addFileChildren(
   CocktailsRouteChildren,
 )
 
+interface LostItemsRouteChildren {
+  LostItemsItemIdRoute: typeof LostItemsItemIdRoute
+  LostItemsIndexRoute: typeof LostItemsIndexRoute
+}
+
+const LostItemsRouteChildren: LostItemsRouteChildren = {
+  LostItemsItemIdRoute: LostItemsItemIdRoute,
+  LostItemsIndexRoute: LostItemsIndexRoute,
+}
+
+const LostItemsRouteWithChildren = LostItemsRoute._addFileChildren(
+  LostItemsRouteChildren,
+)
+
 interface ManualsRouteChildren {
   ManualsIdRoute: typeof ManualsIdRoute
   ManualsIndexRoute: typeof ManualsIndexRoute
@@ -674,6 +744,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRouteWithChildren,
   BreaksRoute: BreaksRouteWithChildren,
   CocktailsRoute: CocktailsRouteWithChildren,
+  LostItemsRoute: LostItemsRouteWithChildren,
   ManualsRoute: ManualsRouteWithChildren,
   OrganizationRoute: OrganizationRouteWithChildren,
   RulesRoute: RulesRouteWithChildren,

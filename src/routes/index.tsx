@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { BreakHomeCard } from "@/components/ui-hub/breaks/BreakHomeCard";
+import { LostItemHomeCard } from "@/components/ui-hub/lost-items/LostItemHomeCard";
 import { EmployeeWorkHomeCard } from "@/components/ui-hub/EmployeeWorkHomeCard";
 import { APP_TAGLINE, APP_VERSION, homeSections } from "@/data/app-sections";
 
@@ -35,7 +36,12 @@ function Home() {
               </span>
               <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground" />
             </Link>
-            {section.id === "manuals" ? <BreakHomeCard /> : null}
+            {section.id === "manuals" ? (
+              <>
+                <BreakHomeCard />
+                <LostItemHomeCard />
+              </>
+            ) : null}
           </Fragment>
         ))}
       </div>
