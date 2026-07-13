@@ -31,7 +31,7 @@ export const APP_TAGLINE = "あなたの業務をいつでもサポートしま�
 export const breakHomeSection: HomeSection = {
   id: "breaks",
   to: "/breaks",
-  emoji: "☕",
+  emoji: "🍵",
   title: "休憩管理",
   description: "休憩の開始・終了を記録",
   color: "#E8A87C",
