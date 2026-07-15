@@ -13,7 +13,8 @@ import {
   BREAK_REPORT_FORMAT_VERSION,
 } from "@/lib/break-report-text";
 import { getRuntimeEnv } from "@/lib/notion-env";
-import { formatIsoTimeInTokyo, formatTokyoSentAtLabel } from "@/lib/tokyo-time";
+import { formatTokyoSentAtLabel } from "@/lib/tokyo-time";
+import { isValidHhmm } from "@/lib/break-time";
 
 const MAX_STAFF_COUNT = 100;
 const MAX_NAME_LENGTH = 50;
@@ -71,11 +72,10 @@ function readResendFromEmail() {
   return email;
 }
 
-function assertValidIsoTimestamp(value: string | null) {
+function assertValidHhmm(value: string | null) {
   if (value === null) return;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    throw new Error("Invalid break timestamp.");
+  if (!isValidHhmm(value)) {
+    throw new Error("Invalid break time.");
   }
 }
 
@@ -124,8 +124,8 @@ export async function sendBreakReportEmail(input: BreakReportInput): Promise<Bre
 
     for (const member of parsed.staff) {
       for (const entry of member.breaks) {
-        assertValidIsoTimestamp(entry.startAt);
-        assertValidIsoTimestamp(entry.endAt);
+        assertValidHhmm(entry.startAt);
+        assertValidHhmm(entry.endAt);
       }
     }
 
@@ -145,15 +145,10 @@ export async function sendBreakReportEmail(input: BreakReportInput): Promise<Bre
     console.log("[break-report] Resend outbound payload", {
       formatVersion: BREAK_REPORT_FORMAT_VERSION,
       serverFn: "sendBreakReport",
-      serverFnRoute: "/_serverFn/{id}",
-      sourceFiles: ["break-functions.ts", "break-report.server.ts", "break-report-text.ts", "tokyo-time.ts"],
-      payloadFields: ["from", "to", "subject", "text"],
       sentAtIso: sentAt.toISOString(),
       sentAtFormatted: formatTokyoSentAtLabel(sentAt),
-      firstBreakStartIso: firstBreak?.startAt ?? null,
-      firstBreakStartFormatted: formatIsoTimeInTokyo(firstBreak?.startAt ?? null),
-      firstBreakEndIso: firstBreak?.endAt ?? null,
-      firstBreakEndFormatted: formatIsoTimeInTokyo(firstBreak?.endAt ?? null),
+      firstBreakStart: firstBreak?.startAt ?? null,
+      firstBreakEnd: firstBreak?.endAt ?? null,
       subject,
       text,
       payload: resendPayload,

@@ -14,10 +14,16 @@ import type { RequiredBreakMinutes } from "@/lib/break-management";
 type BreakAddStaffDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAdd: (input: { name: string; requiredMinutes: RequiredBreakMinutes }) => void;
+  onAdd: (input: { name: string; requiredMinutes: RequiredBreakMinutes }) => Promise<boolean>;
+  saving?: boolean;
 };
 
-export function BreakAddStaffDialog({ open, onOpenChange, onAdd }: BreakAddStaffDialogProps) {
+export function BreakAddStaffDialog({
+  open,
+  onOpenChange,
+  onAdd,
+  saving = false,
+}: BreakAddStaffDialogProps) {
   const [name, setName] = useState("");
   const [requiredMinutes, setRequiredMinutes] = useState<RequiredBreakMinutes>(45);
 
@@ -26,10 +32,11 @@ export function BreakAddStaffDialog({ open, onOpenChange, onAdd }: BreakAddStaff
     setRequiredMinutes(45);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const trimmed = name.trim();
     if (!trimmed) return;
-    onAdd({ name: trimmed, requiredMinutes });
+    const success = await onAdd({ name: trimmed, requiredMinutes });
+    if (!success) return;
     reset();
     onOpenChange(false);
   };
@@ -38,6 +45,7 @@ export function BreakAddStaffDialog({ open, onOpenChange, onAdd }: BreakAddStaff
     <Dialog
       open={open}
       onOpenChange={(next) => {
+        if (saving) return;
         if (!next) reset();
         onOpenChange(next);
       }}
@@ -56,6 +64,7 @@ export function BreakAddStaffDialog({ open, onOpenChange, onAdd }: BreakAddStaff
               onChange={(e) => setName(e.target.value)}
               placeholder="名前を入力"
               autoComplete="off"
+              disabled={saving}
             />
           </div>
 
@@ -72,6 +81,7 @@ export function BreakAddStaffDialog({ open, onOpenChange, onAdd }: BreakAddStaff
                       : "border-border bg-background text-foreground"
                   }`}
                   onClick={() => setRequiredMinutes(minutes)}
+                  disabled={saving}
                 >
                   {minutes}分
                 </button>
@@ -81,11 +91,16 @@ export function BreakAddStaffDialog({ open, onOpenChange, onAdd }: BreakAddStaff
         </div>
 
         <DialogFooter className="gap-2 sm:gap-0">
-          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={saving}
+          >
             キャンセル
           </Button>
-          <Button type="button" onClick={handleSubmit} disabled={!name.trim()}>
-            追加
+          <Button type="button" onClick={handleSubmit} disabled={!name.trim() || saving}>
+            {saving ? "追加中…" : "追加"}
           </Button>
         </DialogFooter>
       </DialogContent>

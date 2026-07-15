@@ -78,6 +78,20 @@ export function readNotionLostItemsDatabaseId(): string {
   return databaseId;
 }
 
+export function readNotionBreaksDatabaseId(): string {
+  const raw = process.env["NOTION_BREAKS_DATABASE_ID"]?.trim();
+  if (!raw) {
+    throw new Error("NOTION_BREAKS_DATABASE_ID is not set");
+  }
+
+  const databaseId = extractNotionId(raw);
+  if (!databaseId) {
+    throw new Error(`NOTION_BREAKS_DATABASE_ID is not a valid Notion database ID: ${raw}`);
+  }
+
+  return databaseId;
+}
+
 export function readNotionBlockId(id: string): string {
   const blockId = extractNotionId(id);
   if (!blockId) {

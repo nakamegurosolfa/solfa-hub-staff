@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 
-import { getBreakDurationMinutes } from "@/lib/break-management";
 import {
   buildEndIsoFromTokyo,
   buildIsoFromTokyoDateAndTime,
@@ -12,6 +11,7 @@ import {
   formatTokyoTimeHhmm,
   shiftTokyoDateKey,
 } from "@/lib/tokyo-time";
+import { getBreakDurationMinutes } from "@/lib/break-time";
 
 describe("tokyo-time storage (UTC runtime)", () => {
   it("stores 14:00 JST as 05:00Z and displays 14:00", () => {
@@ -21,24 +21,17 @@ describe("tokyo-time storage (UTC runtime)", () => {
     expect(formatIsoTimeInputInTokyo(iso)).toBe("14:00");
   });
 
-  it("calculates overnight break 23:00–02:00 as 180 minutes", () => {
-    const startIso = buildIsoFromTokyoDateAndTime("2026-07-13", "23:00");
-    const endIso = buildEndIsoFromTokyo(startIso!, "02:00");
-
-    expect(startIso).toBe("2026-07-13T14:00:00.000Z");
-    expect(endIso).toBe("2026-07-13T17:00:00.000Z");
-    expect(formatIsoTimeInTokyo(startIso)).toBe("23:00");
-    expect(formatIsoTimeInTokyo(endIso)).toBe("02:00");
-    expect(getBreakDurationMinutes({ startAt: startIso, endAt: endIso })).toBe(180);
+  it("calculates overnight break 23:00–02:00 as 180 minutes (HH:mm)", () => {
+    expect(getBreakDurationMinutes({ startAt: "23:00", endAt: "02:00" })).toBe(180);
   });
 
-  it("rolls end time to next JST day when end is earlier than start", () => {
+  it("rolls end time to next JST day when end is earlier than start (ISO builder)", () => {
     const startIso = buildIsoFromTokyoDateAndTime("2026-07-13", "23:30");
     const endIso = buildEndIsoFromTokyo(startIso!, "00:15");
 
     expect(shiftTokyoDateKey("2026-07-13", 1)).toBe("2026-07-14");
     expect(endIso).toBe(buildIsoFromTokyoDateAndTime("2026-07-14", "00:15"));
-    expect(getBreakDurationMinutes({ startAt: startIso, endAt: endIso })).toBe(45);
+    expect(getBreakDurationMinutes({ startAt: "23:30", endAt: "00:15" })).toBe(45);
   });
 
   it("formats sent-at in Japan time", () => {

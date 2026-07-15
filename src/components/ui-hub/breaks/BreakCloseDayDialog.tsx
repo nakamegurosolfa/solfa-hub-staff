@@ -56,11 +56,16 @@ export function BreakCloseDayDialog({
                 スタッフ数：{staffCount}名
               </p>
               <p className="text-muted-foreground">
-                メール送信成功後、この営業日の端末内データは削除されます。
+                メール送信成功後、この営業日のNotionデータはアーカイブされます。
               </p>
             </div>
             <DialogFooter className="gap-2 sm:gap-0">
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={sending}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                disabled={sending}
+              >
                 キャンセル
               </Button>
               <Button type="button" onClick={onConfirmSend} disabled={sending}>
@@ -85,7 +90,12 @@ export function BreakCloseDayDialog({
               </ul>
             </div>
             <DialogFooter className="gap-2 sm:gap-0">
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={sending}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                disabled={sending}
+              >
                 修正して戻る
               </Button>
               <Button type="button" onClick={onConfirmSend} disabled={sending}>
@@ -103,7 +113,7 @@ export function BreakCloseDayDialog({
             <div className="space-y-3 text-sm leading-relaxed text-foreground">
               <p>営業日の記録を送信しました。</p>
               <p className="text-muted-foreground">
-                {dateLabel}営業分の端末内データを削除しました。
+                {dateLabel}営業分のデータをアーカイブしました。
               </p>
             </div>
             <DialogFooter>
@@ -122,13 +132,18 @@ export function BreakCloseDayDialog({
             <div className="space-y-3 text-sm leading-relaxed text-foreground">
               <p>メール送信に失敗しました。</p>
               <p className="text-muted-foreground">
-                記録は端末内に保存されています。
+                記録はNotionに保存されています。
                 <br />
                 通信状況を確認して、もう一度送信してください。
               </p>
             </div>
             <DialogFooter className="gap-2 sm:gap-0">
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={sending}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                disabled={sending}
+              >
                 閉じる
               </Button>
               <Button type="button" onClick={onRetry} disabled={sending}>

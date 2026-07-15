@@ -11,6 +11,7 @@ import {
 type BreakSlotRowProps = {
   index: number;
   entry: BreakEntry;
+  disabled?: boolean;
   onStart: () => void;
   onEnd: () => void;
   onEditStart: (hhmm: string) => void;
@@ -22,6 +23,7 @@ const BREAK_LABELS = ["休憩①", "休憩②", "休憩③", "休憩④"] as con
 export function BreakSlotRow({
   index,
   entry,
+  disabled = false,
   onStart,
   onEnd,
   onEditStart,
@@ -41,10 +43,16 @@ export function BreakSlotRow({
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-2">
-        <Button type="button" size="sm" disabled={hasStart} onClick={onStart}>
+        <Button type="button" size="sm" disabled={disabled || hasStart} onClick={onStart}>
           開始
         </Button>
-        <Button type="button" size="sm" variant="secondary" disabled={!hasStart || hasEnd} onClick={onEnd}>
+        <Button
+          type="button"
+          size="sm"
+          variant="secondary"
+          disabled={disabled || !hasStart || hasEnd}
+          onClick={onEnd}
+        >
           終了
         </Button>
       </div>
@@ -58,6 +66,7 @@ export function BreakSlotRow({
               value={formatTimeInputValue(entry.startAt)}
               onChange={(e) => onEditStart(e.target.value)}
               className="h-9"
+              disabled={disabled}
             />
           ) : (
             <p className="py-2 text-sm text-muted-foreground">{formatTimeLabel(entry.startAt)}</p>
@@ -71,6 +80,7 @@ export function BreakSlotRow({
               value={formatTimeInputValue(entry.endAt)}
               onChange={(e) => onEditEnd(e.target.value)}
               className="h-9"
+              disabled={disabled}
             />
           ) : (
             <p className="py-2 text-sm text-muted-foreground">{formatTimeLabel(entry.endAt)}</p>

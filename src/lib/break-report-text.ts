@@ -2,15 +2,12 @@ import {
   BREAK_SLOT_COUNT,
   type BreakEntry,
   type StaffMember,
+  formatTimeLabel,
   getBreakDurationMinutes,
   getShortageMinutes,
   getTotalCompletedMinutes,
 } from "@/lib/break-management";
-import {
-  formatIsoTimeInTokyo,
-  formatTokyoBusinessDateShortLabel,
-  formatTokyoSentAtLabel,
-} from "@/lib/tokyo-time";
+import { formatTokyoBusinessDateShortLabel, formatTokyoSentAtLabel } from "@/lib/tokyo-time";
 
 const SLOT_LABELS = ["①", "②", "③", "④"] as const;
 
@@ -30,8 +27,8 @@ export function formatBreakSlotForReport(entry: BreakEntry): string {
   if (hasStart && !hasEnd) return "終了未入力";
   if (!hasStart && hasEnd) return "開始未入力";
 
-  const start = formatIsoTimeInTokyo(entry.startAt);
-  const end = formatIsoTimeInTokyo(entry.endAt);
+  const start = formatTimeLabel(entry.startAt);
+  const end = formatTimeLabel(entry.endAt);
   const minutes = getBreakDurationMinutes(entry);
   if (start === "—" || end === "—" || minutes <= 0) return "未記録";
   return `${start}〜${end}（${minutes}分）`;
@@ -59,7 +56,7 @@ function formatStaffSection(staff: StaffMember): string {
   return lines.join("\n");
 }
 
-export const BREAK_REPORT_FORMAT_VERSION = "jst-v4-intl-display";
+export const BREAK_REPORT_FORMAT_VERSION = "jst-v5-hhmm-text";
 
 export function buildBreakReportEmailSubject(businessDate: string): string {
   return `【solfa 休憩管理】${formatBusinessDateShortLabel(businessDate)}営業分`;
