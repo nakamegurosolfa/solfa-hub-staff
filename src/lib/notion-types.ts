@@ -106,12 +106,3 @@ export type CocktailSummary = {
 export type CocktailDetail = CocktailSummary & {
   blocks: NotionBlock[];
 };
-
-export type UpdateHistoryItem = {
-  id: string;
-  title: string;
-  sectionLabel: string;
-  lastEditedAt: string;
-  to: string;
-  params?: Record<string, string>;
-};

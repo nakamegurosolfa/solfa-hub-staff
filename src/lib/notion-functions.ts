@@ -10,7 +10,6 @@ import { getManualDetail, getManualList } from "@/lib/notion-manuals.server";
 import { prepareManualsForIndex, sortManualsByDisplayOrder } from "@/lib/manual-groups";
 import { getQaList } from "@/lib/notion-qa.server";
 import { resolveOrganizationAccessMetadata, resolvePageAccessMetadata } from "@/lib/page-access";
-import { buildUpdateHistory } from "@/lib/update-history";
 
 export const fetchPageAccessMetadata = createServerFn({ method: "GET" })
   .validator(z.string().min(1, "pageId is required"))
@@ -69,11 +68,6 @@ export const fetchCocktailPage = createServerFn({ method: "GET" })
     }
     return getCocktailDetail(pageId);
   });
-
-export const fetchUpdateHistory = createServerFn({ method: "GET" }).handler(async () => {
-  await requireAppAuth();
-  return buildUpdateHistory();
-});
 
 export const fetchQaIndex = createServerFn({ method: "GET" }).handler(async () => {
   await requireAppAuth();
