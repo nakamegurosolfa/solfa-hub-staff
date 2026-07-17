@@ -15,6 +15,18 @@ export type UpdateHistoryEntry = {
 
 export const UPDATE_HISTORY_ENTRIES: UpdateHistoryEntry[] = [
   {
+    version: "ver.1.3.0",
+    date: "2026-07-18",
+    changes: [
+      "カクテルレシピに「テストモード」を追加",
+      "S〜Dランクから複数選択して出題可能",
+      "10問、20問、全問から問題数を選択可能",
+      "全問題終了後に自己採点できる機能を追加",
+      "間違えたカクテルのレシピだけを結果画面で確認可能",
+      "テストモードをカクテル検索欄の下に追加",
+    ],
+  },
+  {
     version: "ver.1.2.0",
     date: "2026-07-15",
     changes: [

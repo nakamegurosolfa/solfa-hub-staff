@@ -6,6 +6,7 @@
  */
 
 import type { CategoryItem } from "@/data/categories";
+import { UPDATE_HISTORY_ENTRIES } from "@/data/update-history-entries";
 
 export type AppSectionId = "cocktails" | "manuals" | "rules" | "organization" | "about";
 
@@ -26,7 +27,7 @@ export const EMPLOYEE_WORK_LABEL = "社員業務";
 
 export const APP_NAME = "solfa STAFF APP";
 export const APP_SHORT_NAME = "solfa STAFF";
-export const APP_VERSION = "ver.1.2.0";
+export const APP_VERSION = "ver.1.3.0";
 
 export const APP_TAGLINE = "あなたの業務をいつでもサポートします。";
 
@@ -82,7 +83,7 @@ export const homeSections: HomeSection[] = [
     to: "/updates",
     emoji: "🕒",
     title: "更新履歴",
-    description: "最近追加・更新された内容",
+    description: `${UPDATE_HISTORY_ENTRIES[0]?.version ?? "ver.1.3.0"} ${UPDATE_HISTORY_ENTRIES[0]?.changes[0] ?? "カクテルレシピにテストモードを追加"}`,
     color: "#6B9FFF",
   },
 ];
