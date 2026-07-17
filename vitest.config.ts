@@ -1,5 +1,5 @@
 import tsconfigPaths from "vite-tsconfig-paths";
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [tsconfigPaths()],
@@ -8,5 +8,6 @@ export default defineConfig({
     env: {
       TZ: "UTC",
     },
+    exclude: [...configDefaults.exclude, "src/routes/**/*.test.tsx"],
   },
 });

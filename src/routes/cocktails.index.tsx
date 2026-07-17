@@ -8,6 +8,7 @@ import { SearchBox } from "@/components/ui-hub/SearchBox";
 import { APP_NAME, appPageTitle } from "@/data/app-sections";
 import { filterCocktails } from "@/lib/cocktail-search";
 import { fetchCocktailIndex } from "@/lib/notion-functions";
+import { CocktailTestModeCard } from "@/components/ui-hub/cocktail-test/CocktailTestModeCard";
 
 const cocktailSearchSchema = z.object({
   q: z.string().optional(),
@@ -53,6 +54,8 @@ function CocktailsIndex() {
         onChange={setQuery}
         placeholder="カクテル名・材料・グラス・氷などで検索"
       />
+
+      <CocktailTestModeCard />
 
       <div className="mt-6 flex flex-col gap-6">
         {filtered.length === 0 ? (

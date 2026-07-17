@@ -35,6 +35,7 @@ import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as ManualsIdRouteImport } from './routes/manuals.$id'
 import { Route as LostItemsItemIdRouteImport } from './routes/lost-items.$itemId'
 import { Route as EmployeeWorkIdRouteImport } from './routes/employee-work.$id'
+import { Route as CocktailsTestRouteImport } from './routes/cocktails.test'
 import { Route as CocktailsIdRouteImport } from './routes/cocktails.$id'
 import { Route as BreaksStaffIdRouteImport } from './routes/breaks.$staffId'
 import { Route as AboutIdRouteImport } from './routes/about.$id'
@@ -172,6 +173,11 @@ const EmployeeWorkIdRoute = EmployeeWorkIdRouteImport.update({
   path: '/employee-work/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CocktailsTestRoute = CocktailsTestRouteImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => CocktailsRoute,
+} as any)
 const CocktailsIdRoute = CocktailsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/about/$id': typeof AboutIdRoute
   '/breaks/$staffId': typeof BreaksStaffIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
+  '/cocktails/test': typeof CocktailsTestRoute
   '/employee-work/$id': typeof EmployeeWorkIdRoute
   '/lost-items/$itemId': typeof LostItemsItemIdRoute
   '/manuals/$id': typeof ManualsIdRoute
@@ -242,6 +249,7 @@ export interface FileRoutesByTo {
   '/about/$id': typeof AboutIdRoute
   '/breaks/$staffId': typeof BreaksStaffIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
+  '/cocktails/test': typeof CocktailsTestRoute
   '/employee-work/$id': typeof EmployeeWorkIdRoute
   '/lost-items/$itemId': typeof LostItemsItemIdRoute
   '/manuals/$id': typeof ManualsIdRoute
@@ -277,6 +285,7 @@ export interface FileRoutesById {
   '/about/$id': typeof AboutIdRoute
   '/breaks/$staffId': typeof BreaksStaffIdRoute
   '/cocktails/$id': typeof CocktailsIdRoute
+  '/cocktails/test': typeof CocktailsTestRoute
   '/employee-work/$id': typeof EmployeeWorkIdRoute
   '/lost-items/$itemId': typeof LostItemsItemIdRoute
   '/manuals/$id': typeof ManualsIdRoute
@@ -313,6 +322,7 @@ export interface FileRouteTypes {
     | '/about/$id'
     | '/breaks/$staffId'
     | '/cocktails/$id'
+    | '/cocktails/test'
     | '/employee-work/$id'
     | '/lost-items/$itemId'
     | '/manuals/$id'
@@ -340,6 +350,7 @@ export interface FileRouteTypes {
     | '/about/$id'
     | '/breaks/$staffId'
     | '/cocktails/$id'
+    | '/cocktails/test'
     | '/employee-work/$id'
     | '/lost-items/$itemId'
     | '/manuals/$id'
@@ -374,6 +385,7 @@ export interface FileRouteTypes {
     | '/about/$id'
     | '/breaks/$staffId'
     | '/cocktails/$id'
+    | '/cocktails/test'
     | '/employee-work/$id'
     | '/lost-items/$itemId'
     | '/manuals/$id'
@@ -602,6 +614,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmployeeWorkIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cocktails/test': {
+      id: '/cocktails/test'
+      path: '/test'
+      fullPath: '/cocktails/test'
+      preLoaderRoute: typeof CocktailsTestRouteImport
+      parentRoute: typeof CocktailsRoute
+    }
     '/cocktails/$id': {
       id: '/cocktails/$id'
       path: '/$id'
@@ -676,11 +695,13 @@ const BreaksRouteWithChildren =
 
 interface CocktailsRouteChildren {
   CocktailsIdRoute: typeof CocktailsIdRoute
+  CocktailsTestRoute: typeof CocktailsTestRoute
   CocktailsIndexRoute: typeof CocktailsIndexRoute
 }
 
 const CocktailsRouteChildren: CocktailsRouteChildren = {
   CocktailsIdRoute: CocktailsIdRoute,
+  CocktailsTestRoute: CocktailsTestRoute,
   CocktailsIndexRoute: CocktailsIndexRoute,
 }
 
