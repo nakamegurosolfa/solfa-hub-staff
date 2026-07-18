@@ -1,50 +1,82 @@
-import { CheckCircle2 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import { CocktailCard } from "@/components/ui-hub/CocktailCard";
-import type { CocktailSummary } from "@/lib/notion-types";
+import { CocktailTestResultDetailCard } from "@/components/ui-hub/cocktail-test/CocktailTestRecipeCard";
+import type { CocktailDetail } from "@/lib/notion-types";
+import type { CocktailTestQuestionResult } from "@/lib/cocktail-test-types";
 
 type CocktailTestResultPanelProps = {
-  totalQuestions: number;
-  incorrectCocktails: CocktailSummary[];
+  correctCount: number;
+  incorrectCount: number;
+  accuracy: number;
+  incorrectResults: CocktailTestQuestionResult[];
+  detailById: Record<string, CocktailDetail>;
   onRetry: () => void;
   onBackToSetup: () => void;
   onBackToRecipes: () => void;
 };
 
 export function CocktailTestResultPanel({
-  totalQuestions,
-  incorrectCocktails,
+  correctCount,
+  incorrectCount,
+  accuracy,
+  incorrectResults,
+  detailById,
   onRetry,
   onBackToSetup,
   onBackToRecipes,
 }: CocktailTestResultPanelProps) {
-  const hasIncorrect = incorrectCocktails.length > 0;
+  const total = correctCount + incorrectCount;
+  const hasIncorrect = incorrectResults.length > 0;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 pb-8">
       <section className="card-surface px-5 py-8 text-center">
         <h2 className="text-[24px] font-bold leading-tight tracking-tight">
-          {totalQuestions}問お疲れさまでした！
+          {total}問お疲れさまでした！
         </h2>
 
-        {hasIncorrect ? (
-          <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
-            間違ったカクテルのレシピはこちらです。
-          </p>
-        ) : (
-          <div className="mt-5 flex flex-col items-center gap-2">
-            <CheckCircle2 className="h-8 w-8 text-primary" aria-hidden />
-            <p className="text-[17px] font-semibold text-primary">全問正解です！</p>
+        <dl className="mt-6 grid grid-cols-3 gap-3 text-center">
+          <div className="rounded-2xl border border-border bg-[var(--color-surface-2)] px-3 py-4">
+            <dt className="text-[12px] text-muted-foreground">正解数</dt>
+            <dd className="mt-1 text-[24px] font-bold text-primary">{correctCount}</dd>
           </div>
+          <div className="rounded-2xl border border-border bg-[var(--color-surface-2)] px-3 py-4">
+            <dt className="text-[12px] text-muted-foreground">不正解数</dt>
+            <dd className="mt-1 text-[24px] font-bold text-destructive">{incorrectCount}</dd>
+          </div>
+          <div className="rounded-2xl border border-border bg-[var(--color-surface-2)] px-3 py-4">
+            <dt className="text-[12px] text-muted-foreground">正答率</dt>
+            <dd className="mt-1 text-[24px] font-bold">{accuracy}%</dd>
+          </div>
+        </dl>
+
+        {!hasIncorrect ? (
+          <p className="mt-5 text-[17px] font-semibold text-primary">全問正解です！</p>
+        ) : (
+          <p className="mt-5 text-[15px] leading-relaxed text-muted-foreground">
+            不正解だったカクテルは、完成済みレシピで確認できます。
+          </p>
         )}
       </section>
 
       {hasIncorrect ? (
-        <div className="flex flex-col gap-3">
-          {incorrectCocktails.map((cocktail) => (
-            <CocktailCard key={cocktail.id} cocktail={cocktail} />
-          ))}
+        <div className="flex flex-col gap-6">
+          <h3 className="text-sm font-semibold tracking-tight text-foreground">
+            不正解だったカクテル
+          </h3>
+          {incorrectResults.map((result) => {
+            const detail = detailById[result.cocktailId];
+            if (!detail) return null;
+
+            return (
+              <CocktailTestResultDetailCard
+                key={result.cocktailId}
+                cocktail={detail}
+                detail={detail}
+                gradeResult={result.gradeResult}
+                userAnswer={result.userAnswer}
+              />
+            );
+          })}
         </div>
       ) : null}
 

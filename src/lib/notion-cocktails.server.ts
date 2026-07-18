@@ -10,7 +10,14 @@ import { getNotionClient, readNotionBlockId, readNotionCocktailDatabaseId } from
 import { isEmployeeOnly } from "@/lib/employee-access";
 import { sortCocktailsForIndex } from "@/lib/cocktail-sort";
 import { getManualPageContent } from "@/lib/notion.server";
-import type { CocktailDetail, CocktailSummary, NotionBlock, NotionRichText } from "@/lib/notion-types";
+import type {
+  CocktailDetail,
+  CocktailPreparationMethod,
+  CocktailSummary,
+  NotionBlock,
+  NotionRichText,
+} from "@/lib/notion-types";
+import { COCKTAIL_PREPARATION_METHODS } from "@/lib/notion-types";
 
 function plainText(text: string): NotionRichText[] {
   return [{ plain_text: text, annotations: defaultAnnotations() }];
@@ -195,6 +202,14 @@ function readPrice(props: PageObjectResponse["properties"]) {
   return formatPrice(readRichText(props, ["価格", "Price"]));
 }
 
+function readPreparationMethod(
+  props: PageObjectResponse["properties"],
+): CocktailPreparationMethod | undefined {
+  const value = readSelect(props, ["作り方"]);
+  if (!value) return undefined;
+  return COCKTAIL_PREPARATION_METHODS.find((method) => method === value);
+}
+
 function readCoverImage(page: PageObjectResponse) {
   if (!page.cover) return undefined;
   if (page.cover.type === "external") return page.cover.external.url;
@@ -214,7 +229,7 @@ function mapCocktailSummary(page: PageObjectResponse): CocktailSummary {
   const ingredientTags = readMultiSelect(props, ["材料タグ", "材料", "Ingredients"]);
   const difficulty = readSelect(props, ["難易度", "Difficulty"]) ?? readRichText(props, ["難易度", "Difficulty"]);
   const recommended = readCheckbox(props, ["オススメ", "おすすめ", "Recommended"]);
-  const recipeText = readRichText(props, ["レシピ本文", "レシピ", "作り方", "Recipe"]);
+  const recipeText = readRichText(props, ["レシピ本文", "レシピ", "Recipe"]);
 
   return {
     id: page.id,
@@ -232,6 +247,7 @@ function mapCocktailSummary(page: PageObjectResponse): CocktailSummary {
     ice: readSelect(props, ["氷", "Ice"]) ?? readRichText(props, ["氷", "Ice"]),
     difficulty,
     recommended,
+    preparationMethod: readPreparationMethod(props),
     recipeText,
     lastEditedAt: page.last_edited_time,
   };

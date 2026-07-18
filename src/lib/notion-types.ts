@@ -83,6 +83,10 @@ export type ManualRootPage = {
   title: string;
 };
 
+export const COCKTAIL_PREPARATION_METHODS = ["Build", "Stir", "Shake"] as const;
+
+export type CocktailPreparationMethod = (typeof COCKTAIL_PREPARATION_METHODS)[number];
+
 export type CocktailSummary = {
   id: string;
   name: string;
@@ -99,6 +103,7 @@ export type CocktailSummary = {
   ice?: string;
   difficulty?: string;
   recommended: boolean;
+  preparationMethod?: CocktailPreparationMethod;
   recipeText?: string;
   lastEditedAt?: string;
 };

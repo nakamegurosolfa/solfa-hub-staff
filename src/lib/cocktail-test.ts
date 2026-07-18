@@ -50,13 +50,27 @@ export function shuffleArray<T>(items: readonly T[]): T[] {
   return copy;
 }
 
+export const COCKTAIL_TEST_EXCLUDED_CATEGORIES = ["その他", "期間限定"] as const;
+
+export function isCocktailExcludedFromTest(cocktail: CocktailSummary): boolean {
+  if (cocktail.limitedTime) return true;
+  if (!cocktail.category) return false;
+  return COCKTAIL_TEST_EXCLUDED_CATEGORIES.includes(
+    cocktail.category as (typeof COCKTAIL_TEST_EXCLUDED_CATEGORIES)[number],
+  );
+}
+
+export function filterCocktailsForTest(cocktails: CocktailSummary[]): CocktailSummary[] {
+  return cocktails.filter((cocktail) => !isCocktailExcludedFromTest(cocktail));
+}
+
 export function filterCocktailsByRanks(
   cocktails: CocktailSummary[],
   ranks: CocktailTestRank[],
 ): CocktailSummary[] {
   const rankSet = new Set(ranks);
   return dedupeCocktailsById(
-    cocktails.filter((cocktail) => {
+    filterCocktailsForTest(cocktails).filter((cocktail) => {
       const rank = normalizeLearningRank(cocktail.learningPriority);
       return rank !== null && rankSet.has(rank);
     }),

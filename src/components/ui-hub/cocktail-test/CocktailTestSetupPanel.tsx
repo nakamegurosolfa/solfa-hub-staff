@@ -11,6 +11,7 @@ type CocktailTestSetupPanelProps = {
   questionCount: CocktailTestQuestionCount;
   setupMessage: string | null;
   canStartTest: boolean;
+  isLoadingDetails: boolean;
   onToggleRank: (rank: CocktailTestRank, checked: boolean) => void;
   onQuestionCountChange: (value: CocktailTestQuestionCount) => void;
   onStart: () => void;
@@ -22,6 +23,7 @@ export function CocktailTestSetupPanel({
   questionCount,
   setupMessage,
   canStartTest,
+  isLoadingDetails,
   onToggleRank,
   onQuestionCountChange,
   onStart,
@@ -97,10 +99,10 @@ export function CocktailTestSetupPanel({
       <Button
         type="button"
         className="h-12 w-full rounded-2xl text-base font-semibold"
-        disabled={!canStartTest || !hasSelectedRanks}
+        disabled={!canStartTest || !hasSelectedRanks || isLoadingDetails}
         onClick={onStart}
       >
-        テストを開始する
+        {isLoadingDetails ? "読み込み中…" : "テストを開始する"}
       </Button>
     </div>
   );

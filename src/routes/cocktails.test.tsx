@@ -11,7 +11,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { AppShell, BackLink, PageHeader } from "@/components/layout/AppShell";
-import { CocktailTestGradingPanel } from "@/components/ui-hub/cocktail-test/CocktailTestGradingPanel";
 import { CocktailTestQuestionPanel } from "@/components/ui-hub/cocktail-test/CocktailTestQuestionPanel";
 import { CocktailTestResultPanel } from "@/components/ui-hub/cocktail-test/CocktailTestResultPanel";
 import { CocktailTestSetupPanel } from "@/components/ui-hub/cocktail-test/CocktailTestSetupPanel";
@@ -47,15 +46,18 @@ function CocktailTestPage() {
   const {
     state,
     ranks,
-    incorrectCocktails,
     currentQuestion,
-    currentGradingCocktail,
-    currentGradingDetail,
+    currentDetail,
+    currentRecipeLines,
+    currentQuestionResult,
+    resultStats,
+    incorrectResults,
     toggleRank,
     setQuestionCount,
     startTest,
-    proceedFromQuestion,
-    markGrading,
+    setCurrentAnswer,
+    submitAnswer,
+    nextQuestion,
     retryTest,
     backToSetup,
     resetTest,
@@ -92,7 +94,7 @@ function CocktailTestPage() {
   }, [pendingExit]);
 
   const backLabel = "カクテルレシピ";
-  const needsExitConfirm = state.phase === "question" || state.phase === "grading";
+  const needsExitConfirm = state.phase === "question";
 
   const handleBackWithoutConfirm = useCallback(() => {
     resetTest();
@@ -165,10 +167,10 @@ function CocktailTestPage() {
           state.phase === "setup"
             ? "ランクと問題数を選んでテストを開始"
             : state.phase === "question"
-              ? "カクテル名を見て答えを思い出しましょう"
-              : state.phase === "result"
-                ? "テスト結果"
-                : "正解レシピと照らし合わせて採点"
+              ? state.isReviewingQuestion
+                ? "正解レシピを確認しましょう"
+                : "材料名・分量・価格を入力してください"
+              : "テスト結果"
         }
       />
 
@@ -179,38 +181,37 @@ function CocktailTestPage() {
           questionCount={state.questionCount}
           setupMessage={state.setupMessage}
           canStartTest={canStartTest}
+          isLoadingDetails={state.isLoadingDetails}
           onToggleRank={toggleRank}
           onQuestionCountChange={setQuestionCount}
           onStart={startTest}
         />
       ) : null}
 
-      {state.phase === "question" && currentQuestion ? (
+      {state.phase === "question" && currentQuestion && currentDetail ? (
         <CocktailTestQuestionPanel
           cocktail={currentQuestion}
+          detail={currentDetail}
+          recipeLines={currentRecipeLines}
           currentIndex={state.currentQuestionIndex}
           total={state.testCocktails.length}
-          isLoadingDetails={state.isLoadingDetails}
-          setupMessage={state.setupMessage}
-          onNext={() => void proceedFromQuestion()}
-        />
-      ) : null}
-
-      {state.phase === "grading" && currentGradingCocktail ? (
-        <CocktailTestGradingPanel
-          cocktail={currentGradingCocktail}
-          detail={currentGradingDetail}
-          currentIndex={state.currentGradingIndex}
-          total={state.testCocktails.length}
-          isTransitioning={state.isTransitioning}
-          onMark={markGrading}
+          isReviewing={state.isReviewingQuestion}
+          answer={state.currentAnswer}
+          gradeResult={currentQuestionResult?.gradeResult ?? null}
+          answerMessage={state.answerMessage}
+          onAnswerChange={setCurrentAnswer}
+          onSubmit={submitAnswer}
+          onNext={nextQuestion}
         />
       ) : null}
 
       {state.phase === "result" ? (
         <CocktailTestResultPanel
-          totalQuestions={state.testCocktails.length}
-          incorrectCocktails={incorrectCocktails}
+          correctCount={resultStats.correctCount}
+          incorrectCount={resultStats.incorrectCount}
+          accuracy={resultStats.accuracy}
+          incorrectResults={incorrectResults}
+          detailById={state.detailById}
           onRetry={retryTest}
           onBackToSetup={() => backToSetup(true)}
           onBackToRecipes={() => {
