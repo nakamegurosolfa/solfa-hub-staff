@@ -2,10 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import {
   gradeCocktailTestAnswer,
+  isCocktailTestable,
   normalizeNumericInput,
   parseCocktailRecipeLine,
   validateCocktailTestAnswerInput,
 } from "@/lib/cocktail-test-recipe";
+import { normalizePreparationMethod } from "@/lib/cocktail-preparation-method";
+import type { CocktailDetail } from "@/lib/notion-types";
 
 const TEST_METHOD = "Shake" as const;
 
@@ -177,5 +180,28 @@ describe("cocktail-test-recipe", () => {
         lines: [{ ingredientName: "カシス", mlAmount: "30" }],
       }),
     ).toContain("作り方");
+  });
+
+  it("treats cocktails with normalized Japanese preparation methods as testable", () => {
+    const detail = {
+      id: "1",
+      name: "Test",
+      employeeOnly: false,
+      limitedTime: false,
+      ingredientTags: [],
+      recommended: false,
+      price: "¥700",
+      preparationMethod: normalizePreparationMethod("シェイク"),
+      blocks: [
+        {
+          id: "b1",
+          type: "bulleted_list_item" as const,
+          richText: [{ plain_text: "カシスリキュール 30ml", annotations: {} as never }],
+        },
+      ],
+    } satisfies CocktailDetail;
+
+    expect(detail.preparationMethod).toBe("Shake");
+    expect(isCocktailTestable(detail)).toBe(true);
   });
 });

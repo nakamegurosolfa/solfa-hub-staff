@@ -83,9 +83,8 @@ export type ManualRootPage = {
   title: string;
 };
 
-export const COCKTAIL_PREPARATION_METHODS = ["Build", "Stir", "Shake"] as const;
-
-export type CocktailPreparationMethod = (typeof COCKTAIL_PREPARATION_METHODS)[number];
+export type { CocktailPreparationMethod } from "@/lib/cocktail-preparation-method";
+export { COCKTAIL_PREPARATION_METHODS } from "@/lib/cocktail-preparation-method";
 
 export type CocktailSummary = {
   id: string;

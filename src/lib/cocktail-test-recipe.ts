@@ -1,6 +1,10 @@
 import { splitCocktailRecipeSections } from "@/lib/cocktail-recipe-sections";
-import type { CocktailDetail, CocktailPreparationMethod } from "@/lib/notion-types";
-import { COCKTAIL_PREPARATION_METHODS } from "@/lib/notion-types";
+import type { CocktailDetail } from "@/lib/notion-types";
+import {
+  COCKTAIL_PREPARATION_METHODS,
+  isValidPreparationMethod,
+  type CocktailPreparationMethod,
+} from "@/lib/cocktail-preparation-method";
 
 export { COCKTAIL_PREPARATION_METHODS };
 export type { CocktailPreparationMethod };
@@ -93,12 +97,6 @@ export function formatUserIngredientDisplay(
     return `${name} ${userLine.mlAmount.trim()}ml`;
   }
   return name;
-}
-
-export function isValidPreparationMethod(
-  value?: string | null,
-): value is CocktailPreparationMethod {
-  return COCKTAIL_PREPARATION_METHODS.includes(value as CocktailPreparationMethod);
 }
 
 export function normalizeIngredientName(value: string): string {

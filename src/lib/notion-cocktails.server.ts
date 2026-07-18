@@ -17,7 +17,7 @@ import type {
   NotionBlock,
   NotionRichText,
 } from "@/lib/notion-types";
-import { COCKTAIL_PREPARATION_METHODS } from "@/lib/notion-types";
+import { normalizePreparationMethod } from "@/lib/cocktail-preparation-method";
 
 function plainText(text: string): NotionRichText[] {
   return [{ plain_text: text, annotations: defaultAnnotations() }];
@@ -205,9 +205,7 @@ function readPrice(props: PageObjectResponse["properties"]) {
 function readPreparationMethod(
   props: PageObjectResponse["properties"],
 ): CocktailPreparationMethod | undefined {
-  const value = readSelect(props, ["作り方"]);
-  if (!value) return undefined;
-  return COCKTAIL_PREPARATION_METHODS.find((method) => method === value);
+  return normalizePreparationMethod(readSelect(props, ["作り方"]));
 }
 
 function readCoverImage(page: PageObjectResponse) {

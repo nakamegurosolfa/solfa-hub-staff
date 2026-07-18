@@ -4,6 +4,10 @@ import { CocktailRecipeSections } from "@/components/ui-hub/CocktailRecipeSectio
 import { formatTestRankLabel, normalizeLearningRank } from "@/lib/cocktail-test";
 import {
   COCKTAIL_PREPARATION_METHODS,
+  COCKTAIL_PREPARATION_METHOD_LABELS,
+  formatPreparationMethodLabel,
+} from "@/lib/cocktail-preparation-method";
+import {
   describeIncorrectReasons,
   extractRecipeLinesFromDetail,
   formatUserIngredientDisplay,
@@ -225,7 +229,7 @@ export function CocktailTestRecipeCard({
                     <div key={method} className="flex items-center gap-3">
                       <RadioGroupItem id={id} value={method} />
                       <Label htmlFor={id} className="cursor-pointer text-[16px] font-medium">
-                        {method}
+                        {COCKTAIL_PREPARATION_METHOD_LABELS[method]}
                       </Label>
                     </div>
                   );
@@ -243,7 +247,7 @@ export function CocktailTestRecipeCard({
                 <li>価格: {answer.price || "未入力"}</li>
               ) : null}
               {gradeResult.reasons.includes("method") ? (
-                <li>作り方: {answer.method || "未選択"}</li>
+                <li>作り方: {formatPreparationMethodLabel(answer.method) || "未選択"}</li>
               ) : null}
               {answer.lines.map((userLine, index) => {
                 const line = recipeLines[index];
@@ -262,7 +266,10 @@ export function CocktailTestRecipeCard({
         {isReview ? (
           <>
             <section className="mt-4">
-              <MetaRow label="作り方" value={detail.preparationMethod} />
+              <MetaRow
+                label="作り方"
+                value={formatPreparationMethodLabel(detail.preparationMethod)}
+              />
               <MetaRow label="グラス" value={detail.glass} />
               <MetaRow label="氷" value={detail.ice} />
               <MetaRow label="難易度" value={formatDifficulty(detail.difficulty)} />
