@@ -41,15 +41,53 @@ export function getBreakDurationMinutes(entry: BreakEntry): number {
   if (!entry.startAt || !entry.endAt) return 0;
   if (!isValidHhmm(entry.startAt) || !isValidHhmm(entry.endAt)) return 0;
 
+  const interval = getBreakIntervalMinutes(entry);
+  if (!interval) return 0;
+  return interval[1] - interval[0];
+}
+
+function getBreakIntervalMinutes(entry: BreakEntry): [number, number] | null {
+  if (!entry.startAt || !entry.endAt) return null;
+  if (!isValidHhmm(entry.startAt) || !isValidHhmm(entry.endAt)) return null;
+
   const startMin = parseHhmmToMinutes(entry.startAt);
   let endMin = parseHhmmToMinutes(entry.endAt);
-  if (startMin === null || endMin === null) return 0;
+  if (startMin === null || endMin === null) return null;
 
   if (endMin <= startMin) {
     endMin += 24 * 60;
   }
 
-  return endMin - startMin;
+  if (endMin <= startMin) return null;
+
+  return [startMin, endMin];
+}
+
+function intervalsOverlap(startA: number, endA: number, startB: number, endB: number): boolean {
+  return Math.max(startA, startB) < Math.min(endA, endB);
+}
+
+/** 22:00〜翌5:00（5:00未満）の深夜割増ゾーンと1分でも重なるか */
+export function isLateNightPremiumBreak(entry: BreakEntry): boolean {
+  const interval = getBreakIntervalMinutes(entry);
+  if (!interval) return false;
+
+  const [start, end] = interval;
+  const dayMinutes = 24 * 60;
+  const eveningStart = 22 * 60;
+  const morningEnd = 5 * 60;
+
+  for (let dayOffset = -1; dayOffset <= 2; dayOffset += 1) {
+    const base = dayOffset * dayMinutes;
+    if (intervalsOverlap(start, end, base + eveningStart, base + dayMinutes)) {
+      return true;
+    }
+    if (intervalsOverlap(start, end, base + dayMinutes, base + dayMinutes + morningEnd)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 export function getTotalCompletedMinutes(breaks: BreakEntry[]): number {

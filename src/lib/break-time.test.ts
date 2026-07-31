@@ -4,6 +4,7 @@ import {
   getBreakDurationMinutes,
   getShortageMinutes,
   getTotalCompletedMinutes,
+  isLateNightPremiumBreak,
   isValidHhmm,
   normalizeHhmm,
 } from "@/lib/break-time";
@@ -44,5 +45,15 @@ describe("break-time HH:mm calculations", () => {
     expect(getTotalCompletedMinutes(breaks)).toBe(60);
     expect(getShortageMinutes(60, breaks)).toBe(0);
     expect(getShortageMinutes(90, breaks)).toBe(30);
+  });
+
+  it("detects late-night premium zone overlap (22:00–05:00)", () => {
+    expect(isLateNightPremiumBreak({ startAt: "21:40", endAt: "21:55" })).toBe(false);
+    expect(isLateNightPremiumBreak({ startAt: "21:55", endAt: "22:10" })).toBe(true);
+    expect(isLateNightPremiumBreak({ startAt: "23:30", endAt: "23:45" })).toBe(true);
+    expect(isLateNightPremiumBreak({ startAt: "04:55", endAt: "05:10" })).toBe(true);
+    expect(isLateNightPremiumBreak({ startAt: "05:10", endAt: "05:25" })).toBe(false);
+    expect(isLateNightPremiumBreak({ startAt: "23:30", endAt: "00:15" })).toBe(true);
+    expect(isLateNightPremiumBreak({ startAt: "10:00", endAt: null })).toBe(false);
   });
 });

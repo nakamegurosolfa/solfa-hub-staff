@@ -9,6 +9,7 @@ import {
 } from "@/lib/break-management";
 import {
   buildBreakReportEmailBody,
+  buildBreakReportEmailHtmlBody,
   buildBreakReportEmailSubject,
   BREAK_REPORT_FORMAT_VERSION,
 } from "@/lib/break-report-text";
@@ -133,12 +134,14 @@ export async function sendBreakReportEmail(input: BreakReportInput): Promise<Bre
     const sentAt = new Date();
     const subject = buildBreakReportEmailSubject(parsed.businessDate);
     const text = buildBreakReportEmailBody(parsed.businessDate, staff, sentAt);
+    const html = buildBreakReportEmailHtmlBody(parsed.businessDate, staff, sentAt);
 
     const resendPayload = {
       from: readResendFromEmail(),
       to: [readBreakReportToEmail()],
       subject,
       text,
+      html,
     };
 
     const firstBreak = staff[0]?.breaks[0];
