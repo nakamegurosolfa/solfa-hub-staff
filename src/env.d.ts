@@ -25,6 +25,7 @@ declare namespace NodeJS {
     RESEND_API_KEY?: string;
     RESEND_FROM?: string;
     BREAK_REPORT_TO?: string;
+    BREAK_ADMIN_PASSWORD?: string;
   }
 }
 

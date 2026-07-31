@@ -21,6 +21,7 @@ const ENV_KEYS = [
   "RESEND_API_KEY",
   "RESEND_FROM",
   "BREAK_REPORT_TO",
+  "BREAK_ADMIN_PASSWORD",
 ] as const;
 
 function parseDotenvLine(line: string) {

@@ -1,6 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+import {
+  requireBreakAdminAuth,
+  requiresManualBreakCorrectionAuth,
+} from "@/lib/break-admin-auth.server";
 import { BREAK_SLOT_COUNT } from "@/lib/breaks-types";
 import { requireAppAuth } from "@/lib/auth.server";
 import {
@@ -55,6 +59,16 @@ export const updateBreakStaff = createServerFn({ method: "POST" })
   .validator(updateBreakStaffInputSchema)
   .handler(async ({ data }) => {
     await requireAppAuth();
+
+    const current = await getBreakStaffFromNotion(data.staffId);
+    if (!current) {
+      throw new Response("Staff not found", { status: 404 });
+    }
+
+    if (requiresManualBreakCorrectionAuth(current.breaks, data.breaks)) {
+      await requireBreakAdminAuth();
+    }
+
     return updateBreakStaffInNotion(data.staffId, { breaks: data.breaks });
   });
 

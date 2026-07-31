@@ -12,6 +12,7 @@ type BreakSlotRowProps = {
   index: number;
   entry: BreakEntry;
   disabled?: boolean;
+  manualCorrectionEnabled?: boolean;
   onStart: () => void;
   onEnd: () => void;
   onEditStart: (hhmm: string) => void;
@@ -24,6 +25,7 @@ export function BreakSlotRow({
   index,
   entry,
   disabled = false,
+  manualCorrectionEnabled = false,
   onStart,
   onEnd,
   onEditStart,
@@ -61,13 +63,17 @@ export function BreakSlotRow({
         <div className="space-y-1">
           <p className="text-[11px] font-medium text-muted-foreground">開始</p>
           {hasStart ? (
-            <Input
-              type="time"
-              value={formatTimeInputValue(entry.startAt)}
-              onChange={(e) => onEditStart(e.target.value)}
-              className="h-9"
-              disabled={disabled}
-            />
+            manualCorrectionEnabled ? (
+              <Input
+                type="time"
+                value={formatTimeInputValue(entry.startAt)}
+                onChange={(e) => onEditStart(e.target.value)}
+                className="h-9"
+                disabled={disabled}
+              />
+            ) : (
+              <p className="py-2 text-sm text-muted-foreground">{formatTimeLabel(entry.startAt)}</p>
+            )
           ) : (
             <p className="py-2 text-sm text-muted-foreground">{formatTimeLabel(entry.startAt)}</p>
           )}
@@ -75,13 +81,17 @@ export function BreakSlotRow({
         <div className="space-y-1">
           <p className="text-[11px] font-medium text-muted-foreground">終了</p>
           {hasEnd ? (
-            <Input
-              type="time"
-              value={formatTimeInputValue(entry.endAt)}
-              onChange={(e) => onEditEnd(e.target.value)}
-              className="h-9"
-              disabled={disabled}
-            />
+            manualCorrectionEnabled ? (
+              <Input
+                type="time"
+                value={formatTimeInputValue(entry.endAt)}
+                onChange={(e) => onEditEnd(e.target.value)}
+                className="h-9"
+                disabled={disabled}
+              />
+            ) : (
+              <p className="py-2 text-sm text-muted-foreground">{formatTimeLabel(entry.endAt)}</p>
+            )
           ) : (
             <p className="py-2 text-sm text-muted-foreground">{formatTimeLabel(entry.endAt)}</p>
           )}

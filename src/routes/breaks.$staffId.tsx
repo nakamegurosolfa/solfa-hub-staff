@@ -13,10 +13,16 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
+import { BreakAdminAuthDialog } from "@/components/ui-hub/breaks/BreakAdminAuthDialog";
 import { BreakSlotRow } from "@/components/ui-hub/breaks/BreakSlotRow";
 import { BreakSyncStatus } from "@/components/ui-hub/breaks/BreakSyncStatus";
 import { useBreakStaffDetail } from "@/hooks/use-break-management";
 import { appPageTitle } from "@/data/app-sections";
+import { verifyBreakAdminPasswordFn } from "@/lib/break-admin-functions";
+import {
+  isBreakAdminAuthenticated,
+  setBreakAdminAuthenticated,
+} from "@/lib/break-admin-session";
 import {
   formatMinutesLabel,
   getShortageMinutes,
@@ -53,6 +59,8 @@ function BreakStaffDetailPage() {
   } = useBreakStaffDetail(businessDate, staffId);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const [manualCorrectionEnabled, setManualCorrectionEnabled] = useState(false);
 
   if (loading && !staff) {
     return (
@@ -93,6 +101,23 @@ function BreakStaffDetailPage() {
   const total = getTotalCompletedMinutes(staff);
   const shortage = getShortageMinutes(staff);
   const isSaving = saveStatus === "saving";
+  const hasCorrectableBreaks = staff.breaks.some((entry) => entry.startAt || entry.endAt);
+
+  const handleRequestManualCorrection = () => {
+    if (isBreakAdminAuthenticated()) {
+      setManualCorrectionEnabled(true);
+      return;
+    }
+
+    setAuthDialogOpen(true);
+  };
+
+  const handleAuthSuccess = () => {
+    setBreakAdminAuthenticated();
+    setManualCorrectionEnabled(true);
+  };
+
+  const handleAuthenticate = async (password: string) => verifyBreakAdminPasswordFn({ data: { password } });
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -132,12 +157,25 @@ function BreakStaffDetailPage() {
           </div>
         </div>
 
+        {hasCorrectableBreaks && !manualCorrectionEnabled ? (
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={handleRequestManualCorrection}
+            disabled={isSaving}
+          >
+            手入力補正
+          </Button>
+        ) : null}
+
         {staff.breaks.map((entry, index) => (
           <BreakSlotRow
             key={index}
             index={index}
             entry={entry}
             disabled={isSaving}
+            manualCorrectionEnabled={manualCorrectionEnabled}
             onStart={() => void startBreak(index)}
             onEnd={() => void endBreak(index)}
             onEditStart={(hhmm) => void editStartTime(index, hhmm)}
@@ -155,6 +193,13 @@ function BreakStaffDetailPage() {
           この営業日から削除
         </Button>
       </div>
+
+      <BreakAdminAuthDialog
+        open={authDialogOpen}
+        onOpenChange={setAuthDialogOpen}
+        onAuthenticate={handleAuthenticate}
+        onSuccess={handleAuthSuccess}
+      />
 
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent className="rounded-3xl">
