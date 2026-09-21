@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { BreakAdminAuthDialog } from "@/components/ui-hub/breaks/BreakAdminAuthDialog";
+import { BreakCountdownDisplay } from "@/components/ui-hub/breaks/BreakCountdownDisplay";
 import { BreakSlotRow } from "@/components/ui-hub/breaks/BreakSlotRow";
 import { BreakSyncStatus } from "@/components/ui-hub/breaks/BreakSyncStatus";
 import { useBreakStaffDetail } from "@/hooks/use-break-management";
@@ -23,6 +24,7 @@ import {
   isBreakAdminAuthenticated,
   setBreakAdminAuthenticated,
 } from "@/lib/break-admin-session";
+import { findActiveBreakEntry } from "@/lib/break-countdown";
 import {
   formatMinutesLabel,
   getShortageMinutes,
@@ -102,6 +104,7 @@ function BreakStaffDetailPage() {
   const shortage = getShortageMinutes(staff);
   const isSaving = saveStatus === "saving";
   const hasCorrectableBreaks = staff.breaks.some((entry) => entry.startAt || entry.endAt);
+  const activeBreak = findActiveBreakEntry(staff.breaks);
 
   const handleRequestManualCorrection = () => {
     if (isBreakAdminAuthenticated()) {
@@ -156,6 +159,10 @@ function BreakStaffDetailPage() {
             </div>
           </div>
         </div>
+
+        {activeBreak?.startAt ? (
+          <BreakCountdownDisplay businessDate={businessDate} startAt={activeBreak.startAt} />
+        ) : null}
 
         {hasCorrectableBreaks && !manualCorrectionEnabled ? (
           <Button
