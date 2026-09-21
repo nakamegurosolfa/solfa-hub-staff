@@ -1,7 +1,7 @@
 import type { BreakEntry } from "@/lib/breaks-types";
-import { buildIsoFromTokyoDateAndTime, shiftTokyoDateKey } from "@/lib/tokyo-time";
+import { buildIsoFromTokyoDateAndTime, formatTokyoTimeHhmm, shiftTokyoDateKey } from "@/lib/tokyo-time";
 
-export const BREAK_COUNTDOWN_DURATION_SECONDS = 15 * 60;
+export const BREAK_PLANNED_DURATION_MINUTES = 15;
 
 export function resolveBreakStartInstant(
   businessDate: string,
@@ -31,25 +31,18 @@ export function resolveBreakStartInstant(
   return candidates.reduce((earliest, date) => (date.getTime() < earliest.getTime() ? date : earliest));
 }
 
-export function getBreakCountdownRemainingSeconds(
+export function getBreakExpectedEndAtLabel(
   businessDate: string,
   startAt: string,
-  now: Date,
-): number {
+  now: Date = new Date(),
+): string {
   const start = resolveBreakStartInstant(businessDate, startAt, now);
   if (!start) {
-    return 0;
+    return "—";
   }
 
-  const remainingMs = start.getTime() + BREAK_COUNTDOWN_DURATION_SECONDS * 1000 - now.getTime();
-  return Math.max(0, Math.floor(remainingMs / 1000));
-}
-
-export function formatBreakCountdownLabel(totalSeconds: number): string {
-  const clamped = Math.max(0, totalSeconds);
-  const minutes = Math.floor(clamped / 60);
-  const seconds = clamped % 60;
-  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  const endAt = new Date(start.getTime() + BREAK_PLANNED_DURATION_MINUTES * 60 * 1000);
+  return formatTokyoTimeHhmm(endAt);
 }
 
 export function findActiveBreakEntry(breaks: BreakEntry[]): BreakEntry | null {
